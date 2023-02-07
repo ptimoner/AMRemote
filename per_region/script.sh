@@ -4,10 +4,10 @@
 IMAGE='fredmoser/accessmod:latest'
 
 # Inputs
-OUTPUT_DIR='./out'
-PROJECT_FILE='./project.am5p'
+OUTPUT_DIR=/$1/out
+PROJECT_FILE=/$1/project.am5p
 R_SCRIPT_FILE='./script.R'
-CONFIG_FILE='./config.json'
+CONFIG_FILE=/$1/config.json
 
 echo "Start processing AccessMod Job"
 
@@ -27,11 +27,11 @@ check_file "$CONFIG_FILE"
 # Run docker with mounted inputs and launch the R script
 docker run \
   --rm \
-  -v $(pwd)/$OUTPUT_DIR:/batch/out \
-  -v $(pwd)/$PROJECT_FILE:/batch/project.am5p \
-  -v $(pwd)/$CONFIG_FILE:/batch/config.json \
+  -v $OUTPUT_DIR:/batch/out \
+  -v $PROJECT_FILE:/batch/project.am5p \
+  -v $CONFIG_FILE:/batch/config.json \
   -v $(pwd)/$R_SCRIPT_FILE:/batch/script.R \
   $IMAGE \
-  Rscript /batch/script.R $1
+  Rscript /batch/script.R $2
 
 

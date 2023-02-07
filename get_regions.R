@@ -44,7 +44,7 @@ amGrassNS(
 # For the report
 toPrint <- hfDf[!duplicated(paste0(hfDf$region, "_", hfDf$index)), c(2, 3)]
 toPrint <- toPrint[order(toPrint$index), ]
-print(toPrint)
+write.csv(toPrint, file = paste0(pathOut, "/inputs.json"), row.names = FALSE)
 # Save JSON for the analysis
 json <- toJSON(list(hfDf = hfDf, index = index), auto_unbox = TRUE)
 write(json, file = paste0(pathOut, "/inputs.json"))

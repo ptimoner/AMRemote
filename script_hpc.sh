@@ -21,7 +21,7 @@ REGION=$SLURM_ARRAY_TASK_ID
 mkdir -p /$1/data$REGION/dbgrass
 mkdir -p /$1/data$REGION/cache
 mkdir -p /$1/data$REGION/logs
-mkdir -p /$1/out/REGION
+mkdir -p /$1/out/$REGION
 
 # Inputs
 OUTPUT_DIR=/$1/out/REGION

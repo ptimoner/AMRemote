@@ -26,7 +26,7 @@ amAnalisisReplayImportProject(
   overwrite = TRUE
 )
 
-# Get service parameter
+# Get region parameter
 ind <- commandArgs(trailingOnly=TRUE)[1]
 selCat <- hfDf[hfDf$index == ind, "cat"]
 selRegion <- unique(hfDf[hfDf$index == ind, "region"])
@@ -41,7 +41,7 @@ regionOut <- gsub("[[:space:]]", "_", regionOut)
 sysTime <- Sys.time()
 timeFolder <- gsub("-|[[:space:]]|\\:", "", sysTime)
 pathOutRegion <- paste0(pathOut, "/", timeFolder)
-mkdirs(pathOutService)
+mkdirs(pathOutRegion)
 
 # Select facilities
 # Create new data frames for the config

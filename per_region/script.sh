@@ -4,7 +4,7 @@
 IMAGE='fredmoser/accessmod:latest'
 
 # Inputs
-OUTPUT_DIR=/$1/out
+OUTPUT_DIR=/$1
 PROJECT_FILE=/$1/project.am5p
 R_SCRIPT_FILE='./get_regions.R'
 CONFIG_FILE=/$1/config.json

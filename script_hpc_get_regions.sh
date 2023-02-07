@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=test
 #SBATCH --time=60
-#SBATCH --partition=shared-cpu
+#SBATCH --partition=public-cpu
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=300000

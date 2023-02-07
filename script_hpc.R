@@ -47,6 +47,10 @@ mkdirs(pathOutRegion)
 # Create new data frames for the config
 facilityT <- conf$tableFacilities
 facilityT$amSelect <- FALSE
+print(selCat)
+print(class(selCat))
+print(class(facilityT$cat))
+print(facilityT$cat)
 facilityT[facilityT$cat %in% selCat, "amSelect"] <- TRUE
 
 # Update facility selection

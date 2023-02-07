@@ -38,6 +38,6 @@ amGrassNS(
     region <- unique(catRegion[, colName])
   }
 )
-json <- toJSON(list(catRegion = catRegion, region = region), auto_unbox = TRUE)
+json <- toJSON(list(catRegion = catRegion, indexRegion = data.frame(index = 1:length(region), region = region), region = region), auto_unbox = TRUE)
 write(json, file = paste0(pathOut, "/inputs.json"))
 

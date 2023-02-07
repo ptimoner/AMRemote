@@ -2,7 +2,7 @@
 # $2 parameter correspond to the path to the singularity AccessMod image
 # to download the image e.g. singularity pull accessmod.sif docker://fredmoser/accessmod:5.8.0
 echo 'Getting regions...'
-srun -o ./slurm_reports/regions.out script_hpc_get_regions.sh $1 $2 $3
+sbatch -o ./slurm_reports/regions.out --wait script_hpc_get_regions.sh $1 $2 $3
 REGIONS=$(cat $1/inputs.json | jq -r '.index | join(",")')
 echo $REGIONS
 REGIONS=$(echo 2)

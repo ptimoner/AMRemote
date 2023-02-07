@@ -34,9 +34,10 @@ amGrassNS(
     # Read.table may produce issues (more columns than column names)
     df <- read.csv(con, header=TRUE, sep="|")
     close(con)
-    region <- df[, c("cat", colName)]
+    catRegion <- df[, c("cat", colName)]
+    region <- unique(catRegion[, colName])
   }
 )
-json <- toJSON(list(region = region), auto_unbox = TRUE)
+json <- toJSON(list(catRegion = catRegion, region = region), auto_unbox = TRUE)
 write(json, file = paste0(pathOut, "/inputs.json"))
 

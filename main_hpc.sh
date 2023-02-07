@@ -8,4 +8,4 @@ echo $REGIONS
 REGIONS=$(echo 2)
 mkdir -p slurm_reports
 echo 'Submitting main analyses (job array)...'
-sbatch -a $REGIONS -o ./slurm_reports/%a_%A.out script_hpc.sh $1 $2
+sbatch --dependency=singleton -a $REGIONS -o ./slurm_reports/%a_%A.out script_hpc.sh $1 $2

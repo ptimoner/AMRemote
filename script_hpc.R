@@ -29,7 +29,7 @@ amAnalisisReplayImportProject(
 # Get service parameter
 ind <- commandArgs(trailingOnly=TRUE)[1]
 selCat <- hfDf[hfDf$index == ind, "cat"]
-selRegion <- unique(hfDf[hdfDf$index == ind, "region"])
+selRegion <- unique(hfDf[hfDf$index == ind, "region"])
 if (length(selRegion) != 1) {
   stop()
 }

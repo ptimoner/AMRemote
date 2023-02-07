@@ -34,13 +34,14 @@ amGrassNS(
     # Read.table may produce issues (more columns than column names)
     df <- read.csv(con, header=TRUE, sep="|")
     close(con)
-    catRegion <- df[, c("cat", colName)]
-    region <- catRegion[, 2]
-    index <- 1:length(region)
-    indexRegion <- data.frame(index = index, region = region)
+    hfCat <- df[, "cat"]
+    hfRegion <- df[, colName]
+    hfIndex <- as.numeric(as.factor(hfRegion))
+    hfDf <- data.frame(cat = hfCat, region = hfRegion, index = hfIndex)
+    index <- unique(hfIndex)
   }
 )
 
-json <- toJSON(list(catRegion = catRegion, indexRegion = indexRegion, index = index, region = region), auto_unbox = TRUE)
+json <- toJSON(list(hfDf = hfDf, index = index), auto_unbox = TRUE)
 write(json, file = paste0(pathOut, "/inputs.json"))
 

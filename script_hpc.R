@@ -16,7 +16,7 @@ pathOut <- "/batch/out"
 conf <- amAnalysisReplayParseConf(pathConfig)
 # Parse inputs.json
 inputs <- fromJSON(pathInputs)
-catRegion <- inputs$catRegion
+hfDf <- inputs$hfDf
 
 # Connection with GRASS database -----------------
 # Import project
@@ -27,34 +27,43 @@ amAnalisisReplayImportProject(
 )
 
 # Get service parameter
-region <- commandArgs(trailingOnly=TRUE)[1]
+ind <- commandArgs(trailingOnly=TRUE)[1]
+selCat <- hfDf[hfDf$index == ind, "cat"]
+selRegion <- unique(hfDf[hdfDf$index == ind, "region"])
+if (length(selRegion) != 1) {
+  stop()
+}
+
+regionOut <- str_squish(selRegion)
+regionOut <- gsub("[[:space:]]", "_", regionOut)
 
 # Main output folder
 sysTime <- Sys.time()
 timeFolder <- gsub("-|[[:space:]]|\\:", "", sysTime)
-pathOutService <- paste0(pathOut, "/", timeFolder)
+pathOutRegion <- paste0(pathOut, "/", timeFolder)
 mkdirs(pathOutService)
 
 # Select facilities
 # Create new data frames for the config
-facilityT <- data.frame(cat = catRegion$cat, amSelect = FALSE)
-facilityT[catRegion$region == region, "amSelect"] <- TRUE
+facilityT <- conf$tableFacilities
+facilityT$cat <- FALSE
+facilityT[facilityT$cat %in% selCat, "amSelect"] <- TRUE
 
 # Update facility selection
-confLocal$args$tableFacilities <- facilityT
+conf$args$tableFacilities <- facilityT
 nSel <- sum(facilityT$amSelect == TRUE)
-idmsg <- sprintf("%s - %s %s", region, nSel, "facilities")
+idmsg <- sprintf("%s - %s %s", selRegion, nSel, "facilities")
 
 # Print timestamp
 amTimeStamp(idmsg)
 
 # Set output dir
-pathDirOut <- file.path(pathOutService, region)
+pathDirOut <- file.path(pathOutRegion, regionOut)
 mkdirs(pathDirOut)
 pathProjectOut <- file.path(pathDirOut, "project_out.am5p")
 
 # Launch replay
-amAnalysisReplayExec(confLocal,
+amAnalysisReplayExec(conf,
                      exportProjectDirectory = pathProjectOut,
                      exportDirectory = pathDirOut
 )

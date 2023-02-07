@@ -35,9 +35,12 @@ amGrassNS(
     df <- read.csv(con, header=TRUE, sep="|")
     close(con)
     catRegion <- df[, c("cat", colName)]
-    region <- unique(catRegion[, colName])
+    region <- catRegion[, 2]
+    index <- 1:length(region)
+    indexRegion <- data.frame(index = index, region = region)
   }
 )
-json <- toJSON(list(catRegion = catRegion, indexRegion = data.frame(index = 1:length(region), region = region), index = 1:length(region), region = region), auto_unbox = TRUE)
+
+json <- toJSON(list(catRegion = catRegion, indexRegion = indexRegion, index = index, region = region), auto_unbox = TRUE)
 write(json, file = paste0(pathOut, "/inputs.json"))
 

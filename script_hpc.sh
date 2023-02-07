@@ -24,7 +24,7 @@ mkdir -p /$1/data$REGION/logs
 mkdir -p /$1/out/$REGION
 
 # Inputs
-OUTPUT_DIR=/$1/out/REGION
+OUTPUT_DIR=/$1/out/$REGION
 PROJECT_FILE=/$1/project.am5p
 R_SCRIPT_FILE='./script_hpc.R'
 CONFIG_FILE=/$1/config.json

@@ -5,7 +5,7 @@
 #SBATCH --partition=public-cpu
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=300000
+#SBATCH --mem=10000
 #SBATCH --mail-type=ALL
 
 # Load modules

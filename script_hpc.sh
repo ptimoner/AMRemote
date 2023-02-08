@@ -8,6 +8,7 @@
 #SBATCH --mem=10000
 #SBATCH --mail-type=ALL
 
+
 # Load modules
 ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
 
@@ -18,18 +19,18 @@ IMAGE=$2
 REGION=$SLURM_ARRAY_TASK_ID
 
 # New directories for binding data folder (bypass denied access for writing) and out directory
-mkdir -p /$1/data$REGION/dbgrass
-mkdir -p /$1/data$REGION/cache
-mkdir -p /$1/data$REGION/logs
+mkdir -p /$1/temp/data$REGION/dbgrass
+mkdir -p /$1/temp/data$REGION/cache
+mkdir -p /$1/temp/data$REGION/logs
 # mkdir -p /$1/out/$3/$REGION
 
 # Inputs
-OUTPUT_DIR=/$1/out/$3
+OUTPUT_DIR=/$1/out/results
 PROJECT_FILE=/$1/project.am5p
 R_SCRIPT_FILE='./script_hpc.R'
 CONFIG_FILE=/$1/config.json
 INPUT_FILE=/$1/inputs.json
-DATA_DIR=/$1/data$REGION
+DATA_DIR=/$1/temp/data$REGION
 
 echo "Start processing AccessMod Job"
 
@@ -62,4 +63,4 @@ singularity run \
   Rscript /batch/script_hpc.R $REGION
 
 # Remove data (dbgrass, logs, cache)
-rm -r /$1/data$REGION
+rm -r /$1/temp/data$REGION

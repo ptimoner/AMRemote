@@ -2,6 +2,7 @@
 # $2 parameter correspond to the path to the singularity AccessMod image
 # to download the image e.g. singularity pull accessmod.sif docker://fredmoser/accessmod:5.8.0
 echo 'Getting regions: please wait...'
+# CHECK parameters
 mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
 # mkdir -p slurm_reports

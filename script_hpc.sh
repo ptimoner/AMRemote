@@ -21,10 +21,10 @@ REGION=$SLURM_ARRAY_TASK_ID
 mkdir -p /$1/data$REGION/dbgrass
 mkdir -p /$1/data$REGION/cache
 mkdir -p /$1/data$REGION/logs
-mkdir -p /$1/out/$REGION
+# mkdir -p /$1/out/$3/$REGION
 
 # Inputs
-OUTPUT_DIR=/$1/out/$REGION
+OUTPUT_DIR=/$1/out/$3
 PROJECT_FILE=/$1/project.am5p
 R_SCRIPT_FILE='./script_hpc.R'
 CONFIG_FILE=/$1/config.json

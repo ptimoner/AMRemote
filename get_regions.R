@@ -16,6 +16,7 @@ pathOut <- "/batch/out"
 
 # Parse config.json
 conf <- amAnalysisReplayParseConf(pathConfig)
+
 # Connection with GRASS database -----------------
 # Import project
 amAnalisisReplayImportProject(

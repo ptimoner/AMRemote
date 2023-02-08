@@ -37,11 +37,8 @@ if (length(selRegion) != 1) {
 regionOut <- str_squish(selRegion)
 regionOut <- gsub("[[:space:]]", "_", regionOut)
 
-# Main output folder
-sysTime <- Sys.time()
-timeFolder <- gsub("-|[[:space:]]|\\:", "", sysTime)
-pathOutRegion <- paste0(pathOut, "/", timeFolder)
-mkdirs(pathOutRegion)
+# # Main output folder
+# mkdirs(pathOut)
 
 # Select facilities
 # Create new data frames for the config
@@ -62,7 +59,7 @@ idmsg <- sprintf("%s - %s %s", selRegion, nSel, "facilities")
 amTimeStamp(idmsg)
 
 # Set output dir
-pathDirOut <- file.path(pathOutRegion, regionOut)
+pathDirOut <- file.path(pathOut, regionOut)
 mkdirs(pathDirOut)
 pathProjectOut <- file.path(pathDirOut, "project_out.am5p")
 

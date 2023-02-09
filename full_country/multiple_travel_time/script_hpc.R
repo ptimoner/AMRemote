@@ -10,7 +10,7 @@ options(warn=-1)
 pathConfig <- "/batch/config.json"
 pathProject <- "/batch/project.am5p"
 pathOut <- "/batch/out"
-pathInputs <- "batch/inputs.json"
+pathInputs <- "/batch/inputs.json"
 
 # Parse config.json
 conf <- amAnalysisReplayParseConf(pathConfig)

@@ -10,9 +10,12 @@ options(warn=-1)
 pathConfig <- "/batch/config.json"
 pathProject <- "/batch/project.am5p"
 pathOut <- "/batch/out"
+pathInputs <- "batch/inputs.json"
 
 # Parse config.json
 conf <- amAnalysisReplayParseConf(pathConfig)
+inputs <- amAnalysisReplayParseConf(pathInputs)
+travelTimes <- inputs$travelTimes
 
 # Connection with GRASS database -----------------
 # Import project
@@ -25,19 +28,27 @@ amAnalisisReplayImportProject(
 
 # Number of facilities
 nSel <- sum(conf$args$tableFacilities == TRUE)
-idmsg <- sprintf("%s %s", nSel, "facilities")
 
-# Print timestamp
-amTimeStamp(idmsg)
 
-# Set output dir
-pathProjectOut <- file.path(pathOut, "project_out.am5p")
+for (tt in travelTimes) {
+  idmsg <- sprintf("%s %s - %s min", nSel, "facilities", tt)
+  
+  # Print timestamp
+  amTimeStamp(idmsg)
+  
+  # Set output dir
+  pathOutTravelTime <- file.path(pathOut, tt)
+  mkdirs(pathOutTravelTime)
+  pathProjectOut <- file.path(pathOutTravelTime, "project_out.am5p")
+  
+  # Launch replay
+  amAnalysisReplayExec(conf,
+                       exportProjectDirectory = pathProjectOut,
+                       exportDirectory = pathOutTravelTime
+  )
+}
 
-# Launch replay
-amAnalysisReplayExec(conf,
-                     exportProjectDirectory = pathProjectOut,
-                     exportDirectory = pathOut
-)
+
 # End message
 amTimeStamp("Finished")
 

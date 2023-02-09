@@ -6,4 +6,4 @@ mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
 
 # echo 'Submitting main analyses (job array)...'
-sbatch -o $1/out/slum_reports/%a_%A.out script_hpc.sh $1 $2 
+sbatch -o $1/out/slum_reports/%a.out script_hpc.sh $1 $2 

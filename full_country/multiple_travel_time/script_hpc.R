@@ -14,7 +14,7 @@ pathInputs <- "batch/inputs.json"
 
 # Parse config.json
 conf <- amAnalysisReplayParseConf(pathConfig)
-inputs <- amAnalysisReplayParseConf(pathInputs)
+inputs <- fromJSON(pathInputs)
 travelTimes <- inputs$travelTimes
 
 # Connection with GRASS database -----------------

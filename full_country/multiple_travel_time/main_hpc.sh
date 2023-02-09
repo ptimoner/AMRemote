@@ -5,5 +5,7 @@
 mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
 
+TRAVELTIMES=$(cat inputs.json | jq -r '.travelTimes | join(",")')
 # echo 'Submitting main analyses (job array)...'
-sbatch -o $1/out/slum_reports/%j.out script_hpc.sh $1 $2 
+echo $TRAVELTIMES
+# sbatch -a $TRAVELTIMES -o $1/out/slum_reports/%a_%A.out script_hpc.sh $1 $2

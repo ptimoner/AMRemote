@@ -17,12 +17,13 @@ conf <- amAnalysisReplayParseConf(pathConfig)
 
 # Connection with GRASS database -----------------
 # Import project
+print("Importing the project...")
 amAnalisisReplayImportProject(
   archive = pathProject,
   name = conf$location,
   overwrite = TRUE
 )
-
+print("Project imported...")
 # Get travel time parameter
 tt <- as.numeric(commandArgs(trailingOnly=TRUE)[1])
 

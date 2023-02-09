@@ -20,11 +20,13 @@ hfDf <- inputs$hfDf
 
 # Connection with GRASS database -----------------
 # Import project
+print("Importing the project...")
 amAnalisisReplayImportProject(
   archive = pathProject,
   name = conf$location,
   overwrite = TRUE
 )
+print("Project imported...")
 
 # Get region parameter
 ind <- commandArgs(trailingOnly=TRUE)[1]

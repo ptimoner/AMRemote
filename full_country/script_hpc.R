@@ -24,7 +24,7 @@ amAnalisisReplayImportProject(
 
 
 # Number of facilities
-nSel <- sum(conf$args$tableFacilities == TRUE)
+nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)
 idmsg <- sprintf("%s %s", nSel, "facilities")
 
 # Print timestamp

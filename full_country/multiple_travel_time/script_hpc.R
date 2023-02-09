@@ -19,16 +19,14 @@ travelTimes <- inputs$travelTimes
 
 # Connection with GRASS database -----------------
 # Import project
-print("Importing project...")
 amAnalisisReplayImportProject(
   archive = pathProject,
   name = conf$location,
   overwrite = TRUE
 )
 
-
 # Number of facilities
-nSel <- sum(conf$args$tableFacilities == TRUE)
+nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)
 
 
 for (tt in travelTimes) {

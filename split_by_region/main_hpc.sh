@@ -1,8 +1,14 @@
 #!/bin/bash
-# $2 parameter correspond to the path to the singularity AccessMod image
+# $1 parameter corresponds to input folder path
+# $2 parameter corresponds to the path to the singularity AccessMod image
 # to download the image e.g. singularity pull accessmod.sif docker://fredmoser/accessmod:5.8.0
+# $3 parameter corresponds to the name of the column in the facility shapefile that refers to the region
+if [[ $# -ne 3 ]]; then
+    echo "Illegal number of parameters" >&2
+    exit 2
+fi
+
 echo 'Getting regions: please wait...'
-# CHECK parameters
 mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
 # mkdir -p slurm_reports

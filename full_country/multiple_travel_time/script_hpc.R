@@ -19,6 +19,7 @@ travelTimes <- inputs$travelTimes
 
 # Connection with GRASS database -----------------
 # Import project
+print("Importing project...")
 amAnalisisReplayImportProject(
   archive = pathProject,
   name = conf$location,

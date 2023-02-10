@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=test
-#SBATCH --time=48:00:00
+#SBATCH --time=4-00:00:00
 #SBATCH --partition=public-cpu
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1

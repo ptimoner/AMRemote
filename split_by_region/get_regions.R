@@ -6,6 +6,8 @@ options(warn=-1)
 
 # Get column name for regions
 colName <- commandArgs(trailingOnly=TRUE)[1]
+# In Accessmod, column names used to be in lower case
+colName <- tolower(colName)
 
 # Load main parameters -----------------
 

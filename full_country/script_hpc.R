@@ -22,8 +22,6 @@ amAnalisisReplayImportProject(
   name = conf$location,
   overwrite = TRUE
 )
-print("Project imported...")
-
 
 # Number of facilities
 nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)

@@ -34,11 +34,13 @@ amGrassNS(
   location = conf$location,
   mapset = conf$mapset,
   {
-    db <- execGRASS("v.db.select", parameters=list(map=conf$args$inputHf), intern=TRUE)
-    con <- textConnection(db)
-    # Read.table may produce issues (more columns than column names)
-    df <- read.csv(con, header=TRUE, sep="|")
-    close(con)
+    # db <- execGRASS("v.db.select", parameters=list(map=conf$args$inputHf), intern=TRUE)
+    # con <- textConnection(db)
+    # # Read.table may produce issues (more columns than column names)
+    # df <- read.csv(con, header=TRUE, sep="|")
+    # close(con)
+    vect <- readVECT(conf$args$inputHf)
+    df <- vect@data
     hfCat <- df[, "cat"]
     hfRegion <- df[, colName]
     hfIndex <- as.numeric(as.factor(hfRegion))

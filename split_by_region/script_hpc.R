@@ -26,7 +26,6 @@ amAnalisisReplayImportProject(
   name = conf$location,
   overwrite = TRUE
 )
-print("Project imported...")
 
 # Get region parameter
 ind <- commandArgs(trailingOnly=TRUE)[1]

@@ -8,7 +8,7 @@ if [[ $# -ne 3 ]]; then
     exit 2
 fi
 
-echo 'Getting regions: please wait...'
+echo 'Getting regions: please wait until the second batch job is submitted...'
 mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
 # mkdir -p slurm_reports

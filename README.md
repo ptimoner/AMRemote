@@ -5,7 +5,7 @@ Are currently available:
 - Standard replay with or without different travel times
 - Replay splitting the analysis by regions (appropriate for coverage analysis in large countries).
 
-## Required files
+## Upload files
 
 You will always need the following files within the same input folder located remotely (hpc or server):
 
@@ -22,7 +22,7 @@ $ scp -r C:/myname/replay <username>@<serveraddress>:~/
 
 ## AccessMod image
 
-In the HPC:
+In the HPC (HPC uses singularity instead of Docker):
 
 ```txt 
 $ singularity pull ~/image/accessmod.sif docker://fredmoser/accessmod:5.8.0
@@ -52,17 +52,16 @@ $ git pull AMRemote
 ```
 ## Procedure
 
-In your remote machine, within the AMRemote folder, go to the folder that corresponds to your analysis. The only scripts that you will potentially run directly
-are the following:
+In your remote machine, within the AMRemote folder, go to the subfolder that corresponds to your analysis. The only scripts that you will potentially run directly are the following:
 
 ```txt 
 |-- script.sh          -> when using a remote server
 |-- main_hpc.sh        -> when using a HPC
 ```
-You will have to give the permission to run them directly (only the first time).
+Change permission so you can execute them (only the first time).
 
 ```txt 
-$ chmod +x scirpt.sh
+$ chmod +x script.sh
 ```
 
 or

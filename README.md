@@ -74,7 +74,7 @@ Run the script with its corresponding parameters:
 
 In all cases the first parameter will be the path to the input folder and the second one the AccessMod image name (server) or path (HPC).
 
-In a server:
+In a server, for instance:
 
 ```txt 
 $ ./script.sh ~/<inputFolder> fredmoser/accessmod:5.8.0
@@ -82,7 +82,7 @@ $ ./script.sh ~/<inputFolder> fredmoser/accessmod:5.8.0
 In a HPC:
 
 ```txt 
-$ ./script.sh ~/<inputFolder> ~/<path to the SIF file>
+$ ./script.sh ~/<inputFolder> ~/image/accesmod.sif
 ```
 For the 'split by region' coverage analysis, you will have to provide a third parameter corresponding to the name of the column in the health facility attribute table that refers to the region.
 

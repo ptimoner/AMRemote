@@ -1,9 +1,9 @@
 # AMRemote
-Standard scripts to run AccessMod analyses remotely (HPC or server) through the replay function. 
+Standard scripts to run AccessMod analyses remotely (server or HPC) through the replay function. 
 
 Are currently available:
-- Standard replay with or without different travel times
-- Replay splitting the analysis by regions (appropriate for coverage analysis in large countries).
+- Standard replay (any module) with or without different travel times
+- Replay splitting the analysis by region (appropriate for coverage analysis in large countries).
 
 ## Upload files
 

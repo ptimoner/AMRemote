@@ -76,7 +76,7 @@ $ chmod +x main_hpc.sh
 
 Run the script with its corresponding parameters:
 
-In every cases you the first parameter will be the path to the input folder and the second one the AccessMod image name (server) or path (HPC).
+In all cases the first parameter will be the path to the input folder and the second one the AccessMod image name (server) or path (HPC).
 
 In a server:
 

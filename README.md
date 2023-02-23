@@ -3,7 +3,7 @@ Standard scripts to run AccessMod analyses remotely (HPC or server) through the 
 
 Are currently available:
 - Standard replay with or without different travel times
-- Replay splitting the analysis by regions (appropriate for coverage analysis in large country).
+- Replay splitting the analysis by regions (appropriate for coverage analysis in large countries).
 
 You need to have the AccessMod image installed in the remote machine.
 

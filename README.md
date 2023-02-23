@@ -5,27 +5,6 @@ Are currently available:
 - Standard replay with or without different travel times
 - Replay splitting the analysis by regions (appropriate for coverage analysis in large countries).
 
-You need to have the AccessMod image installed in the remote machine.
-
-## Install remotely the AccessMod image on HPC
-
-In the remote machine:
-
-```txt 
-$ singularity pull ~/image/accessmod.sif docker://fredmoser/accessmod:5.8.0
-```
-where the image (fredmoser/accessmod:5.8.0) can be adapted, and the path (~/image/accessmod.sif) is chosen by the user. 
-More details here: https://docs.sylabs.io/guides/3.2/user-guide/cli/singularity_pull.html
-
-## Install remotely the AccessMod image on server
-
-In the remote machine:
-
-```txt 
-$ docker pull fredmoser/accessmod:5.8.0
-```
-where the image (fredmoser/accessmod:5.8.0) can be adapted
-
 ## Required files
 
 You will always need the following files within the same input folder located remotely (hpc or server):
@@ -41,9 +20,26 @@ Let's say that you have these files locally in C:/myname/replay and that you wan
 $ scp -r C:/myname/replay <username>@<serveraddress>:~/
 ```
 
-## Required scripts
+## AccessMod image
 
-In your remote disk space, clone and pull (if already cloned) this github repository. In your remote machine:
+In the HPC:
+
+```txt 
+$ singularity pull ~/image/accessmod.sif docker://fredmoser/accessmod:5.8.0
+```
+where the image (fredmoser/accessmod:5.8.0) can be adapted, and the path (~/image/accessmod.sif) is chosen by the user. 
+More details here: https://docs.sylabs.io/guides/3.2/user-guide/cli/singularity_pull.html
+
+In the server:
+
+```txt 
+$ docker pull fredmoser/accessmod:5.8.0
+```
+where the image (fredmoser/accessmod:5.8.0) can be adapted
+
+## Scripts
+
+In your remote disk space, clone and pull (if already cloned) this github repository.
 
 ```txt 
 $ git clone https://github.com/ptimoner/AMRemote/
@@ -55,6 +51,7 @@ or
 $ git pull AMRemote
 ```
 ## Procedure
+
 In your remote machine, within the AMRemote folder, go to the folder that corresponds to your analysis. The only scripts that you will potentially run directly
 are the following:
 

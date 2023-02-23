@@ -98,7 +98,7 @@ For analyses using different travel times, open the inputs.json file and modify 
 ```txt 
 $ nano inputs.json
 ```
-Modify the file, and exit with CTL-X (and Y when asking if you'd like to save changes).
+Modify the file, and exit with CTL-X (and Y when asked if you'd like to save changes).
 
 ## Outputs
 

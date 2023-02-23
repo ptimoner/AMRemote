@@ -92,6 +92,16 @@ For instance,
 ```txt 
 $ ./script.sh ~/<inputFolder> fredmoser/accessmod:5.8.0 admin
 ```
+
+For analyses using different travel times, open the inputs.json file and modify the travel times accordingly. Within the multiple_travel_times folder:
+
+```txt 
+$ nano inputs.json
+```
+Modify the file, and exit with CTL-X (and Y when asking if you'd like to save changes).
+
+## Outputs
+
 Will be created an output folder called 'out' within your input folder with all the results.
 
 To download your results, from your local machine:

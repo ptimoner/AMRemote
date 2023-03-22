@@ -11,6 +11,11 @@ pathConfig <- "/batch/config.json"
 pathInputs <- "/batch/inputs.json"
 pathProject <- "/batch/project.am5p"
 pathOut <- "/batch/out"
+# Output folder
+sysTime <- Sys.time()
+timeFolder <- gsub("-|[[:space:]]|\\:", "", sysTime)
+pathDirOut <- file.path(pathOut, timeFolder)
+mkdirs(pathDirOut)
 
 # Parse config.json
 conf <- amAnalysisReplayParseConf(pathConfig)
@@ -36,7 +41,7 @@ for (tt in inputs$travelTimes) {
   amTimeStamp(idmsg)
   
   # Set output dir
-  pathDirOut <- file.path(pathOut, tt)
+  pathDirOut <- file.path(pathDirOut, tt)
   mkdirs(pathDirOut)
   pathProjectOut <- file.path(pathDirOut, "project_out.am5p")
   

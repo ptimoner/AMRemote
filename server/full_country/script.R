@@ -10,7 +10,7 @@ options(warn=-1)
 pathConfig <- "/batch/config.json"
 pathProject <- "/batch/project.am5p"
 pathOut <- "/batch/out"
-# Output
+# Output folder
 sysTime <- Sys.time()
 timeFolder <- gsub("-|[[:space:]]|\\:", "", sysTime)
 pathDirOut <- file.path(pathOut, timeFolder)

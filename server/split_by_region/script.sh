@@ -7,7 +7,7 @@ IMAGE=$2
 mkdir -p /$1/out
 
 # Inputs
-OUTPUT_DIR=/$1/out/results
+OUTPUT_DIR=/$1/out
 PROJECT_FILE=/$1/project.am5p
 R_SCRIPT_FILE='./script.R'
 CONFIG_FILE=/$1/config.json

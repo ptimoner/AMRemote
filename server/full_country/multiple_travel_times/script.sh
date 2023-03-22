@@ -11,7 +11,7 @@ OUTPUT_DIR=/$1/out
 PROJECT_FILE=/$1/project.am5p
 R_SCRIPT_FILE='./script.R'
 CONFIG_FILE=/$1/config.json
-INPUT_FILE=/$1/inputs.json
+INPUT_FILE='./inputs.json'
 
 echo "Start processing AccessMod Job"
 
@@ -35,7 +35,7 @@ docker run \
   -v $OUTPUT_DIR:/batch/out \
   -v $PROJECT_FILE:/batch/project.am5p \
   -v $CONFIG_FILE:/batch/config.json \
-  -v $INPUT_FILE:/batch/inputs.json \
+  -v $(pwd)/$INPUT_FILE:/batch/inputs.json \
   -v $(pwd)/$R_SCRIPT_FILE:/batch/script.R \
   $IMAGE \
   Rscript /batch/script.R

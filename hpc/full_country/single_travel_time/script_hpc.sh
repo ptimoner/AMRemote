@@ -16,16 +16,16 @@ ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
 IMAGE=$2
 
 # New directories for binding data folder (bypass denied access for writing) and out directory
-mkdir -p /$1/temp/dbgrass
-mkdir -p /$1/temp/cache
-mkdir -p /$1/temp/logs
+mkdir -p $1/temp/dbgrass
+mkdir -p $1/temp/cache
+mkdir -p $1/temp/logs
 
 # Inputs
-OUTPUT_DIR=/$1/out/results
-PROJECT_FILE=/$1/project.am5p
+OUTPUT_DIR=$1/out/results
+PROJECT_FILE=$1/project.am5p
 R_SCRIPT_FILE='./script_hpc.R'
-CONFIG_FILE=/$1/config.json
-DATA_DIR=/$1/temp
+CONFIG_FILE=$1/config.json
+DATA_DIR=$1/temp
 
 echo "Start processing AccessMod Job"
 

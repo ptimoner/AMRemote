@@ -4,13 +4,13 @@
 IMAGE=$2
 
 # Output folder
-mkdir -p /$1/out
+mkdir -p $1/out
 
 # Inputs
-OUTPUT_DIR=/$1/out
-PROJECT_FILE=/$1/project.am5p
+OUTPUT_DIR=$1/out
+PROJECT_FILE=$1/project.am5p
 R_SCRIPT_FILE='./script.R'
-CONFIG_FILE=/$1/config.json
+CONFIG_FILE=$1/config.json
 
 echo "Start processing AccessMod Job"
 

@@ -19,18 +19,18 @@ IMAGE=$2
 REGION=$SLURM_ARRAY_TASK_ID
 
 # New directories for binding data folder (bypass denied access for writing) and out directory
-mkdir -p /$1/temp/data$REGION/dbgrass
-mkdir -p /$1/temp/data$REGION/cache
-mkdir -p /$1/temp/data$REGION/logs
+mkdir -p $1/temp/data$REGION/dbgrass
+mkdir -p $1/temp/data$REGION/cache
+mkdir -p $1/temp/data$REGION/logs
 # mkdir -p /$1/out/$3/$REGION
 
 # Inputs
-OUTPUT_DIR=/$1/out/results
-PROJECT_FILE=/$1/project.am5p
+OUTPUT_DIR=$1/out/results
+PROJECT_FILE=$1/project.am5p
 R_SCRIPT_FILE='./script_hpc.R'
-CONFIG_FILE=/$1/config.json
-INPUT_FILE=/$1/inputs.json
-DATA_DIR=/$1/temp/data$REGION
+CONFIG_FILE=$1/config.json
+INPUT_FILE=$1/inputs.json
+DATA_DIR=$1/temp/data$REGION
 
 echo "Start processing AccessMod Job"
 

@@ -38,7 +38,7 @@ $ docker pull fredmoser/accessmod:5.8.0
 ```
 where the image (fredmoser/accessmod:5.8.0) can be adapted
 
-## Scripts
+## Make scripts available
 
 In your remote disk space, clone and pull (if already cloned) this github repository.
 

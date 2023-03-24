@@ -205,7 +205,7 @@ inputPop <- "rPopulation__rPopulation_Corrected"
 inputZone <- "vZone__vAdmin1"
 timeCumCosts <- c(100, 120)
 zoneIdField <- "cat"
-zoneLabelField <- "admin1_pt"
+zoneLabelField <- "adm1_pt"
 
 
 amGrassNS(

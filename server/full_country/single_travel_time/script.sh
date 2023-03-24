@@ -11,11 +11,13 @@ mkdir -p $1/AMdata/logs
 mkdir -p $1/AMdata/cache
 mkdir -p $1/AMdata/dbgrass
 
+BASH_SCRIPT_DIR=$(echo $0 | sed 's/script.sh//g')
+
 # Inputs
 OUTPUT_DIR=$1/out
 DATA_DIR=$1/AMdata
 PROJECT_FILE=$1/project.am5p
-R_SCRIPT_FILE='./script.R'
+R_SCRIPT_FILE=${BASH_SCRIPT_DIR}script.R
 CONFIG_FILE=$1/config.json
 
 echo "Start processing AccessMod Job"

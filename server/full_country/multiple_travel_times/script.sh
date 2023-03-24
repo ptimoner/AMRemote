@@ -11,13 +11,16 @@ mkdir -p $1/AMdata/logs
 mkdir -p $1/AMdata/cache
 mkdir -p $1/AMdata/dbgrass
 
+# Get the location of this script
+BASH_SCRIPT_DIR=$(echo $0 | sed 's/script.sh//g')
+
 # Inputs
 OUTPUT_DIR=$1/out
 DATA_DIR=$1/AMdata
 PROJECT_FILE=$1/project.am5p
-R_SCRIPT_FILE='./script.R'
+R_SCRIPT_FILE=${BASH_SCRIPT_DIR}script.R
 CONFIG_FILE=$1/config.json
-INPUT_FILE='./inputs.json'
+INPUT_FILE=${BASH_SCRIPT_DIR}inputs.json
 
 echo "Start processing AccessMod Job"
 
@@ -45,7 +48,7 @@ docker run \
   -v $OUTPUT_DIR:/batch/out \
   -v $PROJECT_FILE:/batch/project.am5p \
   -v $CONFIG_FILE:/batch/config.json \
-  -v $(pwd)/$INPUT_FILE:/batch/inputs.json \
-  -v $(pwd)/$R_SCRIPT_FILE:/batch/script.R \
+  -v $INPUT_FILE:/batch/inputs.json \
+  -v $R_SCRIPT_FILE:/batch/script.R \
   $IMAGE \
   Rscript /batch/script.R

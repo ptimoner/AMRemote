@@ -1,0 +1,7 @@
+{
+    "inputFolder": ~/example,
+    "splitRegion": true,
+    "maxTravelTime": [1, 2, 3],
+    "AccessModVersion": "5.8.0"
+    
+}

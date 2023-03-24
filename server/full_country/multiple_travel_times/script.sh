@@ -12,14 +12,16 @@ mkdir -p $1/AMdata/cache
 mkdir -p $1/AMdata/dbgrass
 
 # Get the location of this script
-BASH_SCRIPT_DIR=$(echo $0 | sed 's/script.sh//g')
+BASH_SCRIPT_DIR=$(realpath $(echo $0 | sed 's/script.sh//g'))
+
+INP=$(realpath $1)
 
 # Inputs
-OUTPUT_DIR=$1/out
-DATA_DIR=$1/AMdata
-PROJECT_FILE=$1/project.am5p
+OUTPUT_DIR=$INP/out
+DATA_DIR=$INP/AMdata
+PROJECT_FILE=$INP/project.am5p
 R_SCRIPT_FILE=${BASH_SCRIPT_DIR}script.R
-CONFIG_FILE=$1/config.json
+CONFIG_FILE=$INP/config.json
 INPUT_FILE=${BASH_SCRIPT_DIR}inputs.json
 
 echo "Start processing AccessMod Job"

@@ -22,7 +22,7 @@ else
     else
       BASH_SCRIPT_DIR=$(echo $0 | sed 's/script.sh//g')
       chmod +x ${BASH_SCRIPT_DIR}init.sh
-      nohup ${BASH_SCRIPT_DIR}init.sh $1 $2 > $1/nohup.out &
+      nohup ${BASH_SCRIPT_DIR}init.sh $1 $2 $BASH_SCRIPT_DIR > $1/nohup.out &
     fi
   else
     echo "Unknown third parameter" >&2

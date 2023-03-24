@@ -14,7 +14,7 @@ elif [[ $# -eq 2 ]]; then
       ${BASH_SCRIPT_DIR}init.sh $1 $2 $BASH_SCRIPT_DIR
     fi
 else
-  if [[ $3 == "-nb"]]; then
+  if [[ $3 == "-nb" ]]; then
     if [[ ! -e $1 ]]; then 
       echo "Missing dir: $1";
       exit 2;

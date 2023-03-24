@@ -7,7 +7,7 @@ if [[ $# -lt 2 || $# -gt 3 ]]; then
     exit 2
 elif [[ $# -eq 2 ]]; then
     if [[ ! -e $1 ]]; then 
-      echo "Missing dir: $1";
+      echo "Missing dir: $1"
       exit 2;
     else
       BASH_SCRIPT_DIR=$(echo $0 | sed 's/script.sh//g')

@@ -11,5 +11,8 @@ fi
 mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
 
-# echo 'Submitting main analyses (job array)...'
-sbatch -o $1/out/slum_reports/%j.out script_hpc.sh $1 $2
+# Get location of the main script
+BASH_SCRIPT_DIR=$(echo $0 | sed 's/main_hpc.sh//g')
+
+# echo 'Submitting job...'
+sbatch -o $1/out/slum_reports/%j.out script_hpc.sh $1 $2 $BASH_SCRIPT_DIR

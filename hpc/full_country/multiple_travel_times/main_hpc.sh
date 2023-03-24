@@ -11,6 +11,9 @@ fi
 mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
 
+# Get location of the main script
+BASH_SCRIPT_DIR=$(echo $0 | sed 's/main_hpc.sh//g')
+
 TRAVELTIMES=$(cat inputs.json | jq -r '.travelTimes | join(",")')
 # echo 'Submitting main analyses (job array)...'
-sbatch -a $TRAVELTIMES -o $1/out/slum_reports/%a_%A.out script_hpc.sh $1 $2
+sbatch -a $TRAVELTIMES -o $1/out/slum_reports/%a_%A.out script_hpc.sh $1 $2 $BASH_SCRIPT_DIR

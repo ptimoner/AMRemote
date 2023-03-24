@@ -19,10 +19,13 @@ mkdir -p $1/dataTemp/dbgrass
 mkdir -p $1/dataTemp/cache
 mkdir -p $1/dataTemp/logs
 
+# Get the location of the main script
+BASH_SCRIPT_DIR=$4
+
 # Inputs
 OUTPUT_DIR=$1
 PROJECT_FILE=$1/project.am5p
-R_SCRIPT_FILE='./get_regions.R'
+R_SCRIPT_FILE=${BASH_SCRIPT_DIR}get_regions.R
 CONFIG_FILE=$1/config.json
 DATA_DIR=$1/dataTemp
 

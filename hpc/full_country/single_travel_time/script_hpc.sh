@@ -20,10 +20,13 @@ mkdir -p $1/temp/dbgrass
 mkdir -p $1/temp/cache
 mkdir -p $1/temp/logs
 
+# Get the location of main script (provided through main_hpc)
+BASH_SCRIPT_DIR=$3
+
 # Inputs
 OUTPUT_DIR=$1/out/results
 PROJECT_FILE=$1/project.am5p
-R_SCRIPT_FILE='./script_hpc.R'
+R_SCRIPT_FILE=${BASH_SCRIPT_DIR}script_hpc.R
 CONFIG_FILE=$1/config.json
 DATA_DIR=$1/temp
 

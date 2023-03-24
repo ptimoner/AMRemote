@@ -24,10 +24,13 @@ mkdir -p $1/temp/data$TRAVELTIME/cache
 mkdir -p $1/temp/data$TRAVELTIME/logs
 # mkdir -p /$1/out/$3/$TRAVELTIME
 
+# Get the location of this script
+BASH_SCRIPT_DIR=$3
+
 # Inputs
 OUTPUT_DIR=$1/out/results
 PROJECT_FILE=$1/project.am5p
-R_SCRIPT_FILE='./script_hpc.R'
+R_SCRIPT_FILE=${BASH_SCRIPT_DIR}script_hpc.R
 CONFIG_FILE=$1/config.json
 DATA_DIR=$1/temp/data$TRAVELTIME
 

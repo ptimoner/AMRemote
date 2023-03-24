@@ -24,10 +24,13 @@ mkdir -p $1/temp/data$REGION/cache
 mkdir -p $1/temp/data$REGION/logs
 # mkdir -p /$1/out/$3/$REGION
 
+# Get the location of this script
+BASH_SCRIPT_DIR=$3
+
 # Inputs
 OUTPUT_DIR=$1/out/results
 PROJECT_FILE=$1/project.am5p
-R_SCRIPT_FILE='./script_hpc.R'
+R_SCRIPT_FILE=${BASH_SCRIPT_DIR}script_hpc.R
 CONFIG_FILE=$1/config.json
 INPUT_FILE=$1/inputs.json
 DATA_DIR=$1/temp/data$REGION

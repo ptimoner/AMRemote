@@ -11,11 +11,14 @@ fi
 echo 'Getting regions: please wait until the second batch job is submitted...'
 mkdir -p $1/out/slum_reports
 mkdir -p $1/out/results
-# mkdir -p slurm_reports
-sbatch -W -o $1/out/slum_reports/regions.out script_hpc_get_regions.sh $1 $2 $3
+
+# Get location of the main script
+BASH_SCRIPT_DIR=$(echo $0 | sed 's/main_hpc.sh//g')
+
+sbatch -W -o $1/out/slum_reports/regions_%j.out ${BASH_SCRIPT_DIR}script_hpc_get_regions.sh $1 $2 $3 $BASH_SCRIPT_DIR
 REGIONS=$(cat $1/inputs.json | jq -r '.index | join(",")')
 # echo $REGIONS
 # REGIONS=$(echo 2)
 
 # echo 'Submitting main analyses (job array)...'
-sbatch -a $REGIONS -o $1/out/slum_reports/%a_%A.out script_hpc.sh $1 $2
+sbatch -a $REGIONS -o $1/out/slum_reports/%a_%A.out script_hpc.sh $1 $2 $BASH_SCRIPT_DIR

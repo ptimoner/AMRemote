@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+# new main script
 
 if [[ $# -lt 2 || $# -gt 3 ]]; then
     echo "Illegal number of parameters" >&2

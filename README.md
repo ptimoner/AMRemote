@@ -7,7 +7,7 @@ Are currently available:
 
 ## Upload files
 
-You will always need the following files within the same input folder located remotely (hpc or server):
+You will always need the following files (identical names) within the same input folder located remotely (hpc or server):
 
 ```txt 
 |-- project.amp5       -> AccessMod project

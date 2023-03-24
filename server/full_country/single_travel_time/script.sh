@@ -11,6 +11,7 @@ elif [[ $# -eq 2 ]]; then
       exit 2;
     else
       BASH_SCRIPT_DIR=$(echo $0 | sed 's/script.sh//g')
+      chmod +x ${BASH_SCRIPT_DIR}init.sh
       ${BASH_SCRIPT_DIR}init.sh $1 $2 $BASH_SCRIPT_DIR
     fi
 else
@@ -20,6 +21,7 @@ else
       exit 2;
     else
       BASH_SCRIPT_DIR=$(echo $0 | sed 's/script.sh//g')
+      chmod +x ${BASH_SCRIPT_DIR}init.sh
       nohup ${BASH_SCRIPT_DIR}init.sh $1 $2 > $1/nohup.out &
     fi
   else

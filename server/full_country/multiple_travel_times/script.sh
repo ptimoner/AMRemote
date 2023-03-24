@@ -20,9 +20,9 @@ INP=$(realpath $1)
 OUTPUT_DIR=$INP/out
 DATA_DIR=$INP/AMdata
 PROJECT_FILE=$INP/project.am5p
-R_SCRIPT_FILE=${BASH_SCRIPT_DIR}script.R
+R_SCRIPT_FILE=${BASH_SCRIPT_DIR}/script.R
 CONFIG_FILE=$INP/config.json
-INPUT_FILE=${BASH_SCRIPT_DIR}inputs.json
+INPUT_FILE=${BASH_SCRIPT_DIR}/inputs.json
 
 echo "Start processing AccessMod Job"
 

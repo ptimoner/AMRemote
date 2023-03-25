@@ -1,7 +1,13 @@
 {
     "inputFolder": "~/example",
-    "splitRegion": false,
-    "maxTravelTime": [0],
     "AccessModVersion": "5.8.0"
-    "adminColName": ""
+    "maxTravelTime": [0],
+    "splitRegion": false,
+    "splitRegionAdminColName": "",
+    "zonalStat": true,
+    "zonalStatPop": "",
+    "zonalStatZones": "",
+    "zonalStatIDField": "",
+    "zonalStatLabelField": "",
+    "nohup:": true
 }

@@ -1,4 +1,24 @@
-amZonalAnalysis <- function(
+replay <- function (conf, tt, pathOut) {
+  nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)
+  idmsg <- sprintf("%s %s - %s min", nSel, "facilities", tt)
+  
+  # Print timestamp
+  amTimeStamp(idmsg)
+  
+  # Set output dir
+  pathDirOut <- file.path(pathOut, paste0(tt, "-min"))
+  mkdirs(pathDirOut)
+  pathProjectOut <- file.path(pathDirOut, "project_out.am5p")
+  
+  # Launch replay
+  amAnalysisReplayExec(conf,
+                       exportProjectDirectory = pathProjectOut,
+                       exportDirectory = pathDirOut
+  )
+}
+
+# From amZonalAnalysis
+zonalAnalysis <- function(
     inputTravelTime,
     inputPop,
     inputZone,

@@ -5,11 +5,11 @@ AMVersion=$(jq -r '.AccessModVersion' inputs.json)
 IMAGE="fredmoser/accessmod:$AMVersion"
 
 # Get input folder path from inputs.json file (eval is required for ~)
-INPUT_DIR=$(realpath $(eval echo $(jq -r '.inputFolder' inputs.json)))
+INPUT_DIR=$(eval echo $(jq -r '.inputFolder' inputs.json))
 # Check if inputs exists
-if [[ ! -e $INPUT_DIR/project.amp5 ]]
+if [[ ! -e $INPUT_DIR/project.am5p ]]
 then 
-  echo "Missing file: $INPUT_DIR/project.amp5"
+  echo "Missing file: $INPUT_DIR/project.am5p"
   exit 2;
 fi
 
@@ -19,15 +19,18 @@ then
   exit 2
 fi
 
+INPUT_DIR=$(realpath $INPUT_DIR))
+
 # Max travel times
-lengthMaxT=$(jq -r '.maxTravelTime | length' inputs.json)
-if [[ $lengthMaxT -gt 1 ]]
-then
-  multiTT=true
-else
-  multiTT=false
-fi
-inputTravelTime=$(jq -r '.maxTravelTime | join(" ")' inputs.json)
+# Not necessary; anyway a loop on travel times (if length = 1, that's ok)
+# lengthMaxT=$(jq -r '.maxTravelTime | length' inputs.json)
+# if [[ $lengthMaxT -gt 1 ]]
+# then
+#   multiTT=true
+# else
+#   multiTT=false
+# fi
+maxTravelTime=$(jq -r '.maxTravelTime | join(" ")' inputs.json)
 
 # Check if split region
 # Get admin column anyway (will be passed anyway)
@@ -41,7 +44,6 @@ then
     exit 2
   fi
 else
-then
   if [[ -n $adminCol ]]
   then
     echo "splitRegionAdminColName parameter will be ignored (splitRegion=false)"
@@ -69,6 +71,7 @@ then
   if [[ $analysis != 'amTravelTimeAnalysis' ]]
   then
     echo "zonalStat can be true only if AccessMod analysis is amTravelTimeAnalysis; check the config.json file"
+    exit 2
   fi
 else
  if [[ -n $inputPop ]]
@@ -91,6 +94,6 @@ fi
 
 # Script location
 RUN_DIR=$(realpath $(dirname $0))
-PARAM=("$INPUT_DIR" "$IMAGE" "$RUN_DIR" "$multiTT" "$inputTravelTime" "$split" "$adminCol" "$zonalStat" "$inputPop" "$inputZone" "$zoneIDField" "$zoneLabelField")
+PARAM=("$INPUT_DIR" "$IMAGE" "$RUN_DIR" "$maxTravelTime" "$split" "$adminCol" "$zonalStat" "$inputPop" "$inputZone" "$zoneIDField" "$zoneLabelField")
 
 bash "$RUN_DIR/sh/launchdocker.sh" "${PARAM[@]}"

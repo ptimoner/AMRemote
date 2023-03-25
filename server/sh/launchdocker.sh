@@ -6,17 +6,17 @@ PARAM=("${@}")
 INPUT_DIR=${PARAM[0]}
 IMAGE=${PARAM[1]}
 RUN_DIR=${PARAM[2]}
-multiTT=${PARAM[3]}
-inputTravelTime=${PARAM[4]}
-split=${PARAM[5]}
-adminCol=${PARAM[6]}
-zonalStat=${PARAM[7]}
-inputPop=${PARAM[8]}
-inputZone=${PARAM[9]}
-zoneIDField=${PARAM[10]}
-zoneLabelField=${PARAM[11]}
+# multiTT=${PARAM[3]}
+maxTravelTime=${PARAM[3]}
+split=${PARAM[4]}
+adminCol=${PARAM[5]}
+zonalStat=${PARAM[6]}
+inputPop=${PARAM[7]}
+inputZone=${PARAM[8]}
+zoneIDField=${PARAM[9]}
+zoneLabelField=${PARAM[10]}
 
-PARAM=("$multiTT" "$inputTravelTime" "$split" "$adminCol" "$zonalStat" "$inputPop" "$inputZone" "$zoneIDField" "$zoneLabelField")
+PARAM=("$maxTravelTime" "$split" "$adminCol" "$zonalStat" "$inputPop" "$inputZone" "$zoneIDField" "$zoneLabelField")
 
 # As the container will be run as a non-root user, we need to bind the /data folder
 # If not, we don't have the right to access it (by default volume mounted to the root)
@@ -28,11 +28,12 @@ mkdir -p "$INPUT_DIR/AMdata/cache"
 mkdir -p "$INPUT_DIR/AMdata/dbgrass"
 
 # Files to be binded
-OUTPUT_DIR=$INPUT_DIR/out
-DATA_DIR=$INPUT_DIR/AMdata
-PROJECT_FILE=$INPUT_DIR/project.am5p
-R_SCRIPT_FILE=$RUN_DIR/R/replay.R
-CONFIG_FILE=$INPUT_DIR/config.json
+OUTPUT_DIR="$INPUT_DIR/out"
+DATA_DIR="$INPUT_DIR/AMdata"
+PROJECT_FILE="$INPUT_DIR/project.am5p"
+REPLAY_SCRIPT_FILE="$RUN_DIR/R/replay.R"
+FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
+CONFIG_FILE="$INPUT_DIR/config.json"
 
 echo "Start processing AccessMod Job"
 # Run docker with mounted inputs and launch the R script
@@ -45,6 +46,7 @@ docker run \
   -v $OUTPUT_DIR:/batch/out \
   -v $PROJECT_FILE:/batch/project.am5p \
   -v $CONFIG_FILE:/batch/config.json \
-  -v $R_SCRIPT_FILE:/batch/script.R \
+  -v $REPLAY_SCRIPT_FILE:/batch/replay.R \
+  -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   $IMAGE \
-  Rscript /batch/script.R --args "${PARAM[@]}"
+  Rscript /batch/replay.R "${PARAM[@]}"

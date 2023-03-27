@@ -3,10 +3,10 @@
 PARAM=("${@}")
 
 # Parameters
-INPUT_DIR=${PARAM[0]}
-IMAGE=${PARAM[1]}
-RUN_DIR=${PARAM[2]}
-OUTPUT_DIR=${PARAM[11]}
+INPUT_DIR=${PARAM[1]}
+IMAGE=${PARAM[2]}
+RUN_DIR=${PARAM[3]}
+OUTPUT_DIR=${PARAM[4]}
 
 # As the container will be run as a non-root user, we need to bind the /data folder
 # If not, we don't have the right to access it (by default volume mounted to the root)

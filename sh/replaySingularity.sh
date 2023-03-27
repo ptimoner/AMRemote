@@ -18,6 +18,7 @@ INPUT_DIR=${PARAM[1]}
 RUN_DIR=${PARAM[3]}
 SPLIT=${PARAM[6]}
 OUTPUT_DIR=${PARAM[4]}
+IMAGE=${PARAM[2]}
 
 # Is this a regular job or a job array
 if [[ -n $SLURM_ARRAY_TASK_ID ]]

@@ -49,6 +49,7 @@ fi
 PROJECT_FILE="$INPUT_DIR/project.am5p"
 R_SCRIPT_FILE="$RUN_DIR/R/replay.R"
 CONFIG_FILE="$INPUT_DIR/config.json"
+FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 
 # If split we need to bind the regions.json file as well
 if [[ $SPLIT == "true" ]]
@@ -61,6 +62,7 @@ then
     -B $PROJECT_FILE:/batch/project.am5p \
     -B $CONFIG_FILE:/batch/config.json \
     -B $REGION_JSON_FILE:/batch/regions.json \
+    -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     -B $R_SCRIPT_FILE:/batch/replay.R \
     -B $DATA_DIR:/data \
     --pwd /app \
@@ -72,6 +74,7 @@ else
   -B $OUTPUT_DIR:/batch/out \
   -B $PROJECT_FILE:/batch/project.am5p \
   -B $CONFIG_FILE:/batch/config.json \
+  -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   -B $R_SCRIPT_FILE:/batch/replay.R \
   -B $DATA_DIR:/data \
   --pwd /app \

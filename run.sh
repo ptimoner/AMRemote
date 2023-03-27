@@ -29,7 +29,7 @@ else
 fi
 
 # Get AccessMod image
-IMAGE=$(echo eval $(jq -r '.AccessModImage' "$RUN_DIR/inputs.json"))
+IMAGE=$(eval echo $(jq -r '.AccessModImage' "$RUN_DIR/inputs.json"))
 if ! echo "$IMAGE" | grep -q "\.sif" && [[ $HPC == "true" ]]
 then
   echo "Singularity is used instead of Docker; Please provide the path of the .sif file"

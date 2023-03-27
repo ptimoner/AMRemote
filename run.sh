@@ -29,7 +29,7 @@ else
 fi
 
 # Get AccessMod image
-IMAGE=$(jq -r '.AccessModImage' "$RUN_DIR/inputs.json")
+IMAGE=$(echo eval $(jq -r '.AccessModImage' "$RUN_DIR/inputs.json"))
 if ! echo "$IMAGE" | grep -q "\.sif" && [[ $HPC == "true" ]]
 then
   echo "Singularity is used instead of Docker; Please provide the path of the .sif file"
@@ -41,6 +41,8 @@ then
   echo "Docker is used here and .sif file are only for Singulariy; Please provide the docker image name (e.g. fredmoser/accessmod:5.8.0)"
   exit 2
 fi
+
+IMAGE=$(realpath $IMAGE)
 
 # Get input folder path from inputs.json file (eval is required for ~)
 INPUT_DIR=$(eval echo $(jq -r '.inputFolder' "$RUN_DIR/inputs.json"))

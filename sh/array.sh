@@ -90,8 +90,8 @@ JOB_ARRAY_ID=$(squeue -h -u $USER -o %i -n array)
 # Regular job
 if [[ -z "$ARRAY_ID" ]]
 then
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" "$RUN_DIR/replaySingularity.sh" "${PARAM[@]}"
+  sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 else
   # Job array
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output "$OUTPUT_DIR/slum_reports/%a_%A.out" "$RUN_DIR/replaySingularity.sh" "${PARAM[@]}"
+  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output "$OUTPUT_DIR/slum_reports/%a_%A.out" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 fi

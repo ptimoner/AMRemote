@@ -173,7 +173,6 @@ then
     bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
   fi
 else
-then
   # Make directory for slurm reports
   mkdir -p "$OUTPUT_DIR/slum_reports"
   # If split by region, run first regions.sh

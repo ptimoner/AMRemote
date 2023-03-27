@@ -64,6 +64,7 @@ then
   else
   # If only split
   ARRAY_IND=$REGIONS
+  fi
 else
 # If no split by region
 # To maintain same number of parameters that are passed through the different scripts

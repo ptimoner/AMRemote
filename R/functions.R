@@ -1,3 +1,10 @@
+importProject <- function (pathProject, conf) {
+  amAnalisisReplayImportProject(
+  archive = pathProject,
+  name = conf$location,
+  overwrite = TRUE
+)}
+
 replay <- function (conf, tt, pathOut) {
   nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)
   idmsg <- sprintf("%s %s - %s min", nSel, "facilities", tt)
@@ -16,6 +23,26 @@ replay <- function (conf, tt, pathOut) {
                        exportDirectory = pathDirOut
   )
 }
+
+byRegion <- function (hfDf, ind, conf, pathOut, tt) {
+  selCat <- hfDf[hfDf$index == ind, "cat"]
+  selRegion <- unique(hfDf[hfDf$index == ind, "region"])
+  if (length(selRegion) != 1) {
+    stop()
+  }
+  regionOut <- str_squish(selRegion)
+  regionOut <- gsub("[[:space:]]", "_", regionOut)
+  pathOutRegion <- file.path(pathOut, regionOut)
+  # Select facilities
+  # Create new data frames for the config
+  facilityT <- conf$args$tableFacilities
+  facilityT$amSelect <- FALSE
+  facilityT[facilityT$cat %in% selCat, "amSelect"] <- TRUE
+  # Update facility selection
+  conf$args$tableFacilities <- facilityT
+  replay(conf, tt, pathOutRegion)
+}
+
 
 # From amZonalAnalysis
 zonalAnalysis <- function(

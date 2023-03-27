@@ -12,6 +12,8 @@ function is_boolean {
   fi
 }
 
+# Script location
+RUN_DIR=$(realpath $(dirname $0))
 
 # Is slurm management available (cluster)
 if command -v sinfo >/dev/null 2>&1
@@ -22,12 +24,12 @@ if command -v sinfo >/dev/null 2>&1
 else
   HPC=false
   # Do we want to be able to close the terminal without killing the process
-  NOHUP=$(jq -r '.nohup' inputs.json)
+  NOHUP=$(jq -r '.nohup' "$RUN_DIR/inputs.json")
   is_boolean "$NOHUP"
 fi
 
 # Get AccessMod image
-IMAGE=$(jq -r '.AccessModImage' inputs.json)
+IMAGE=$(jq -r '.AccessModImage' "$RUN_DIR/inputs.json")
 if ! echo "$IMAGE" | grep -q "\.sif" && [[ $HPC == "true" ]]
 then
   echo "Singularity is used instead of Docker; Please provide the path of the .sif file"
@@ -41,7 +43,7 @@ then
 fi
 
 # Get input folder path from inputs.json file (eval is required for ~)
-INPUT_DIR=$(eval echo $(jq -r '.inputFolder' inputs.json))
+INPUT_DIR=$(eval echo $(jq -r '.inputFolder' "$RUN_DIR/inputs.json"))
 # Check if inputs exists
 if [[ ! -e "$INPUT_DIR/project.am5p" ]]
 then 
@@ -59,7 +61,7 @@ fi
 INPUT_DIR=$(realpath $INPUT_DIR))
 
 # Max travel times (can be one or multiple)
-MAX_TRAVEL_TIME=$(jq -r '.maxTravelTime | join(" ")' inputs.json)
+MAX_TRAVEL_TIME=$(jq -r '.maxTravelTime | join(" ")' "$RUN_DIR/inputs.json")
 # Check if integers
 # Split the string into an array
 MAX_TRAVEL_TIME_ARRAY=($MAX_TRAVEL_TIME)
@@ -74,10 +76,10 @@ do
 done
 
 # Check if split by region region (only coverage analysis)
-SPLIT=$(jq -r '.splitRegion' inputs.json)
+SPLIT=$(jq -r '.splitRegion' "$RUN_DIR/inputs.json")
 is_boolean "$SPLIT"
 # Check if zonal stat (only accessbility analysis)
-ZONAL_STAT=$(jq -r '.zonalStat' inputs.json)
+ZONAL_STAT=$(jq -r '.zonalStat' "$RUN_DIR/inputs.json")
 is_boolean "$ZONAL_STAT"
 
 # If split by region or zonal stat we have to check the config.json file
@@ -88,7 +90,7 @@ then
 fi
 
 # Get admin unit column anyway (will be passed anyway)
-ADMIN_COL=$(jq -r '.splitRegionAdminColName' inputs.json)
+ADMIN_COL=$(jq -r '.splitRegionAdminColName' "$RUN_DIR/inputs.json")
 if [[ $SPLIT == "true" ]]
 then
   if [[ $ANALYSIS != 'amCapacityAnalysis' ]]
@@ -98,7 +100,7 @@ then
   fi
   if [[ -z $ADMIN_COL ]]
   then
-    echo "splitRegion = true; Missing column name of administrative units in health facility shapefile in the inputs.json file"
+    echo "splitRegion = true; Missing column name of administrative units in health facility shapefile in the "$RUN_DIR/inputs.json" file"
     exit 2
   fi
 else
@@ -110,10 +112,10 @@ fi
 
 # ZonalStat
 # They are passed anyway
-INPUT_POP=$(jq -r '.zonalStatPop' inputs.json)
-INPUT_ZONE=$(jq -r '.zonalStatZones' inputs.json)
-ZONE_ID_FIELD=$(jq -r '.zonalStatIDField' inputs.json)
-ZONE_LABEL_FIELD=$(jq -r '.zonalStatLabelField' inputs.json)
+INPUT_POP=$(jq -r '.zonalStatPop' "$RUN_DIR/inputs.json")
+INPUT_ZONE=$(jq -r '.zonalStatZones' "$RUN_DIR/inputs.json")
+ZONE_ID_FIELD=$(jq -r '.zonalStatIDField' "$RUN_DIR/inputs.json")
+ZONE_LABEL_FIELD=$(jq -r '.zonalStatLabelField' "$RUN_DIR/inputs.json")
 
 # Check if zonal statistics is needed
 if [[ $ZONAL_STAT == "true" ]]
@@ -147,8 +149,7 @@ else
  fi
 fi
 
-# Script location
-RUN_DIR=$(realpath $(dirname $0))
+
 # Get the current date and time in the format YYYY-MM-DD-HH-MM-SS
 TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
 # Out directory

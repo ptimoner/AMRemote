@@ -58,7 +58,7 @@ then
 fi
 
 # Get the absolute path
-INPUT_DIR=$(realpath $INPUT_DIR))
+INPUT_DIR=$(realpath $INPUT_DIR)
 
 # Max travel times (can be one or multiple)
 MAX_TRAVEL_TIME=$(jq -r '.maxTravelTime | join(" ")' "$RUN_DIR/inputs.json")

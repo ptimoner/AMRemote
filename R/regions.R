@@ -22,12 +22,7 @@ conf <- amAnalysisReplayParseConf(pathConfig)
 # Connection with GRASS database -----------------
 # Import project
 print("Importing the project...")
-amAnalisisReplayImportProject(
-  archive = pathProject,
-  name = conf$location,
-  overwrite = TRUE
-)
-print("Project imported...")
+importProject(pathProject, conf)
 
 # Load the health facility attribute table
 amGrassNS(

@@ -1,3 +1,4 @@
+# Import project
 importProject <- function (pathProject, conf) {
   amAnalisisReplayImportProject(
   archive = pathProject,
@@ -5,6 +6,7 @@ importProject <- function (pathProject, conf) {
   overwrite = TRUE
 )}
 
+# Replay function
 replay <- function (conf, tt, pathOut) {
   nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)
   idmsg <- sprintf("%s %s - %s min", nSel, "facilities", tt)
@@ -24,6 +26,7 @@ replay <- function (conf, tt, pathOut) {
   )
 }
 
+# Replay splitting by region
 byRegion <- function (hfDf, ind, conf, pathOut, tt) {
   selCat <- hfDf[hfDf$index == ind, "cat"]
   selRegion <- unique(hfDf[hfDf$index == ind, "region"])
@@ -181,8 +184,6 @@ zonalAnalysis <- function(
         "popTravelTime",
         "popCoveredPercent"
       )]
-      
-      
       if (i == 1) {
         res$table <- statZoneMerge[order(statZoneMerge$popCoveredPercent), ]
       } else {
@@ -193,6 +194,5 @@ zonalAnalysis <- function(
       }
     }
   }
-  
   return(res)
 }

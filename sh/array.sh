@@ -16,14 +16,14 @@ SPLIT=${PARAM[6]}
 OUTPUT_DIR=${PARAM[4]}
 ZONAL_STAT=${PARAM[8]}
 
-# Do we have multiple travel times
+# Do we have multiple travel times (in specific cases we would run a job array)
 if [ ${#MAX_TRAVEL_TIME} -gt 1 ]
 then
     MULTI_TRAVEL_TIMES=true
 else
     MULTI_TRAVEL_TIMES=false
 fi
-PARAM+=("$MULTI_TRAVEL_TIMES")
+
 # Do we need an array (multiple travel times, split by region, both) ?
 # Check if split by region
 if [ $SPLIT == "true" ]
@@ -37,7 +37,7 @@ then
   REGIONS=$(cat "$REGION_JSON_FILE" | jq -r '.index | join(",")')
   # Pass all parameters + JSON file path (required in R script)
   PARAM+=("$REGION_JSON_FILE")
-  if [[ $MULTI_TRAVEL_TIMES == "true" && $ZONAL_STAT == "false" ]]
+  if [[ $MULTI_TRAVEL_TIMES == "true" ]]
   then
     # We want to be able to separate then the time and the region index
     # Must be numerical for sbatch array
@@ -46,7 +46,7 @@ then
     REGION_ARRAY=(${REGIONS//,/ })
     # Initialize the output variable
     ARRAY_IND=""
-    ADD=5000
+    ADD=10000
     # Loop over each element of a and b
     for i in "${TIME_ARRAY[@]}"
     do
@@ -62,14 +62,18 @@ then
     # Remove the trailing comma from the output string
     ARRAY_IND=${ARRAY_IND::-1}
   else
+  # If only split
   ARRAY_IND=$REGIONS
 else
+# If no split by region
+# To maintain same number of parameters that are passed through the different scripts
   REGION_JSON_FILE=""
   PARAM+=("$REGION_JSON_FILE")
   if [[ MULTI_TRAVEL_TIMES == "true" ]]
   then
     if [[ ZONAL_STAT == "false" ]]
     then
+    # ID will be travel times
       ARRAY_ID="${MAX_TRAVEL_TIME// /,}"
     else
       ARRAY_ID=""
@@ -79,11 +83,14 @@ else
   fi
 fi
 
-# Get the ID of this second job
+# Get the ID of this second job to be sure to run the last sbatch after this one is finished
 JOB_ARRAY_ID=$(squeue -h -u $USER -o %i -n array)
 
+# Regular job
 if [[ -z "$ARRAY_ID" ]]
 then
   sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" replaySingularity.sh "${PARAM[@]}"
 else
+  # Job array
   sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output "$OUTPUT_DIR/slum_reports/%a_%A.out" replaySingularity.sh "${PARAM[@]}"
+fi

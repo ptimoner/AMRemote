@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Do we use slurm management (cluster) or not ?
-if which sinfo >/dev/null 2>&1; then
+if command -v sinfo >/dev/null 2>&1
+  then
   echo "Slurm Workload Manager is installed"
   echo "'nohup' argument will be ignored"
   hpc=true

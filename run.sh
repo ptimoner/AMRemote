@@ -2,14 +2,21 @@
 
 # Define the function to check if a variable is a boolean ()
 function is_boolean {
-  # Define the regular expression for matching boolean values
-  BOOLEAN_REGEX="^(true|false)$"
-  # Check if the input variable matches the boolean regex
-  if [[ ! $1 =~ $BOOLEAN_REGEX ]]
+  RESP=$(jq -r --arg VAR "$1" '.[$VAR]' "$RUN_DIR/inputs.json")
+  if [[ -z $RESP ]]
   then
-    echo "$1 is not a boolean (true/false)."
-    exit 2
+    RESP=false
+  else
+  #  Define the regular expression for matching boolean values
+    BOOLEAN_REGEX="^(true|false)$"
+    # Check if the input variable matches the boolean regex
+    if [[ ! $RESP =~ "$BOOLEAN_REGEX" ]]
+    then
+      echo "$1 is not a boolean (true/false)."
+      exit 2
+    fi
   fi
+  return $RESP
 }
 
 # Script location

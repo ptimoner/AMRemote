@@ -46,7 +46,6 @@ byRegion <- function (hfDf, ind, conf, pathOut, tt) {
   replay(conf, tt, pathOutRegion)
 }
 
-
 # From amZonalAnalysis
 zonalAnalysis <- function(
     inputTravelTime,

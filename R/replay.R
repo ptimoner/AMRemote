@@ -31,7 +31,7 @@ split <- as.logical(commandArgs(trailingOnly = TRUE)[7])
 # When multiple times, we replace the maxTravelTime by the JOB ID corresponding to one single maximum travel time
 if (hpc) {
   # This parameter is not empty if job array
-  jobId <- commandArgs(trailingOnly = TRUE)[16]
+  jobId <- commandArgs(trailingOnly = TRUE)[17]
   if (nchar(jobId) > 0) {
     # We have an array based on region and travel time (no zonal stat possible)
     if (nchar(jobId) == 10) {

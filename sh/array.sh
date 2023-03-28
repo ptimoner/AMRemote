@@ -28,7 +28,7 @@ fi
 # Check if split by region
 if [ $SPLIT == "true" ]
 then
-  JOB_REGIONS_ID=${PARAM[13]}
+  JOB_REGIONS_ID=${PARAM[14]}
   # Wait for the first job to complete before continuing
   scontrol wait jobid="$JOB_REGIONS_ID"
   # Path to the created regions.json file (with get_regions.R)

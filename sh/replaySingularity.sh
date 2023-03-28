@@ -54,7 +54,7 @@ FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 # If split we need to bind the regions.json file as well
 if [[ $SPLIT == "true" ]]
 then
-  REGION_JSON_FILE=${PARAM[14]}
+  REGION_JSON_FILE=${PARAM[15]}
   # Run image with binded inputs and launch R script
   echo "Start processing AccessMod Job"
   singularity run \

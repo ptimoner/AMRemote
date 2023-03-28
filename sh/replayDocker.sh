@@ -41,7 +41,7 @@ then
     -v $REPLAY_SCRIPT_FILE:/batch/replay.R \
     -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     $IMAGE \
-    Rscript /batch/replayDocker.R "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" & sleep 1s && echo ""
+    Rscript /batch/replay.R "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" & sleep 1s && echo ""
   echo "To monitor the progress of your analysis, type: cat $OUTPUT_DIR/nohup.out"
   echo "To kill the process, use the command: docker stop $RANDOM_ID"
   echo "The container ID ($RANDOM_ID) is saved in $OUTPUT_DIR/docker_id.out"
@@ -56,5 +56,5 @@ else
     -v $REPLAY_SCRIPT_FILE:/batch/replay.R \
     -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     $IMAGE \
-    Rscript /batch/replayDocker.R "${PARAM[@]}"
+    Rscript /batch/replay.R "${PARAM[@]}"
 fi

@@ -58,4 +58,3 @@ else
     -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     $IMAGE \
     Rscript /batch/replayDocker.R "${PARAM[@]}"
-

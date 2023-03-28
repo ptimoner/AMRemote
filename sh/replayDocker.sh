@@ -18,7 +18,7 @@ mkdir -p "$INPUT_DIR/AMdata/dbgrass"
 # Files to be binded
 DATA_DIR="$INPUT_DIR/AMdata"
 PROJECT_FILE="$INPUT_DIR/project.am5p"
-REPLAY_SCRIPT_FILE="$RUN_DIR/R/replayDocker.R"
+REPLAY_SCRIPT_FILE="$RUN_DIR/R/replay.R"
 FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 CONFIG_FILE="$INPUT_DIR/config.json"
 
@@ -33,7 +33,7 @@ nonup docker run \
   -v $OUTPUT_DIR:/batch/out \
   -v $PROJECT_FILE:/batch/project.am5p \
   -v $CONFIG_FILE:/batch/config.json \
-  -v $REPLAY_SCRIPT_FILE:/batch/replayDocker.R \
+  -v $REPLAY_SCRIPT_FILE:/batch/replay.R \
   -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   $IMAGE \
   Rscript /batch/replayDocker.R "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" &

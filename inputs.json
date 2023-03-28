@@ -1,10 +1,10 @@
 {
     "inputFolder": "~/example",
-    "AccessModImage": "fredmoser/accessmod:5.8.0"
+    "AccessModImage": "fredmoser/accessmod:5.8.0",
     "maxTravelTime": [0],
     "splitRegion": false,
     "splitRegionAdminColName": "",
-    "zonalStat": true,
+    "zonalStat": false,
     "zonalStatPop": "",
     "zonalStatZones": "",
     "zonalStatIDField": "",

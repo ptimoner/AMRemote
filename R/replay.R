@@ -125,8 +125,9 @@ if (zonalStat) {
       )
     }
   )
-  zonalStatFile <- file.path(pathOut, "zonalStat", "zonalStat.csv")
-  write.csv(res, zonalStatFile, row.names = FALSE)
+  zonalStatDir <- file.path(pathOut, "zonalStat")
+  mkdirs(zonalStatDir) 
+  write.csv(res, file.path(zonalStatDir, "zonalStat.csv"), row.names = FALSE)
 }
 
 # End message

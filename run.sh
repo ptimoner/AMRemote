@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Define the function to check if a variable is a boolean ()
+# If empty set to false
 function is_boolean {
-  local RESP=$(jq -r --arg VAR "$1" '.[$VAR]' "$RUN_DIR/inputs.json")
-  if [[ -z $RESP ]]
+  RESP=$(jq -r --arg VAR "$1" '.[$VAR]' "$RUN_DIR/inputs.json")
+  if [[ -z "$RESP" ]]
   then
     RESP=false
   else
@@ -13,35 +14,35 @@ function is_boolean {
     if [[ ! $RESP =~ $BOOLEAN_REGEX ]]
     then
       echo "$1 is not a boolean (true/false)."
-      exit 2
+      #exit 2
     fi
   fi
-  return $RESP
+  echo $RESP
 }
 
 # Script location
 RUN_DIR=$(realpath $(dirname $0))
+# Check if input.json is ok (when modifying manually, errors can occur)
+jq "empty" $(realpath "$RUN_DIR/inputs.json")
+if [ $? -ne 0 ]; then
+  echo "An error occurred. Check the inputs.json file. Exiting..."
+  exit 2
+fi
+
+# Get boolean values from inputs.json file
+NOHUP=$(is_boolean nohup)
+SPLIT=$(is_boolean splitRegion)
+ZONAL_STAT=$(is_boolean zonalStat)
 
 # Is slurm management available (cluster)
-NOHUP=is_boolean "nohup"
-SPLIT=is_boolean "splitRegion"
-ZONAL_STAT=is_boolean "zonalStat"
-echo $NOHUP
-echo $SPLIT
-echo $ZONAL_STAT
-exit
-
 if command -v sinfo >/dev/null 2>&1
   then
   echo "Slurm Workload Manager is installed"
-  if [[ -z  ]]
+  if [[ $NOHUP == "true"  ]]
   echo "'nohup' argument will be ignored"
   HPC=true
 else
   HPC=false
-  # Do we want to be able to close the terminal without killing the process
-  #NOHUP=$(jq -r '.nohup' "$RUN_DIR/inputs.json")
-  NOHUP=is_boolean "nohup"
 fi
 
 # Get AccessMod image
@@ -66,7 +67,7 @@ INPUT_DIR=$(eval echo $(jq -r '.inputFolder' "$RUN_DIR/inputs.json"))
 if [[ ! -e "$INPUT_DIR/project.am5p" ]]
 then 
   echo "Missing file: $INPUT_DIR/project.am5p"
-  exit 2;
+  exit 2
 fi
 
 if [[ ! -e "$INPUT_DIR/config.json" ]]
@@ -92,13 +93,6 @@ do
     exit 2
   fi
 done
-
-# Check if split by region region (only coverage analysis)
-SPLIT=$(jq -r '.splitRegion' "$RUN_DIR/inputs.json")
-is_boolean "$SPLIT"
-# Check if zonal stat (only accessbility analysis)
-ZONAL_STAT=$(jq -r '.zonalStat' "$RUN_DIR/inputs.json")
-is_boolean "$ZONAL_STAT"
 
 # If split by region or zonal stat we have to check the config.json file
 # to see if the analysis ok

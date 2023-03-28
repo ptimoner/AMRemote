@@ -61,7 +61,11 @@ then
   exit 2
 fi
 
-IMAGE=$(realpath $IMAGE)
+# Get absolute path to singularity image
+if [[ $HPC == "true" ]]
+then
+  IMAGE=$(realpath $IMAGE)
+fi
 
 # Get input folder path from inputs.json file (eval is required for ~)
 INPUT_DIR=$(eval echo $(jq -r '.inputFolder' "$RUN_DIR/inputs.json"))

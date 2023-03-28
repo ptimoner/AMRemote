@@ -1,6 +1,6 @@
 # AMRemote
 Standard tool to run AccessMod analyses through the replay function. It can be run on any server with docker installed, on
-any HPC (cluster) with Singularity available or on your local machine. A Unix-like OS on your machine either to run the replay or to
+any HPC (cluster) with Singularity available, or on your local machine. A Unix-like OS on your machine is required, either to run the replay or to
 interact with a server/cluster. Available options are: accesssibility analysis, accessibility analysis + zonal statistics, coverage analysis (either splitting by region or not). Considering multiple maximum travel times is possible.
 
 ## Inputs
@@ -65,16 +65,26 @@ You will find the following parameters:
 
 ```txt 
 |-- inputFolder                -> path to the folder that contains the project.am5p and config.json files
-|-- AccessModImage             -> when using Docker (in a server or locally) the name of the image (e.g. fredmoser/accessmod:5.8.0) or the path to the image (e.g. ~/images/accessmod.sif) when using Singularity (cluster)
-|-- maxTravelTime              -> an array of maximum travel times (e.g. [60,120]); when zonalStat is true, the prior accessibility analysis will be run with no maximum travel time (will be set to 0)
-|-- splitRegion                -> logical parameter (true/false) to indicate if the analysis must be splitted by region (only for coverage analysis)
-|-- splitRegionAdminColName    -> when splitRegion is true, the name of the column in the facility shapefile corresponding the name of the regions
-|-- zonalStat                  -> logical parameter (true/false) to indicate if a Zonal Statistics analysis must be run (only for accessibility analysis)
-|-- zonalStatPop               -> when zonalStat is true, the label of the population layer in the AccessMod project
+|-- AccessModImage             -> when using Docker (in a server or locally) 
+the name of the image (e.g. fredmoser/accessmod:5.8.0) or the path to the image 
+(e.g. ~/images/accessmod.sif) when using Singularity (cluster)
+|-- maxTravelTime              -> an array of maximum travel times (e.g. [60,120]); when zonalStat 
+is true, the prior accessibility analysis will be run with no maximum travel time (will be set to 0)
+|-- splitRegion                -> logical parameter (true/false) to indicate if the analysis must 
+be splitted by region (only for coverage analysis)
+|-- splitRegionAdminColName    -> when splitRegion is true, the name of the column in the facility 
+shapefile corresponding the name of the regions
+|-- zonalStat                  -> logical parameter (true/false) to indicate if a Zonal Statistics analysis 
+must be run (only for accessibility analysis)
+|-- zonalStatPop               -> when zonalStat is true, the label of the population layer in the 
+AccessMod project
 |-- zonalStatZones             -> when zonalStat is true, the label of the zone layer in the AccessMod project
 |-- zonalStatIDField           -> when zonalStat is true, the ID field (integer) in the zone layer
 |-- zonalStatLabelField        -> when zonalStat is true, the label field in the zone layer
-|-- nohup                      -> logical parameter (true/false) only considered when running the analysis on a regular server; if true it indicates that the analysis does not stop when the user logs out; still possible to check the progress of the analysis or to kill the process (instructions on how to do it are given when running the analysis).
+|-- nohup                      -> logical parameter (true/false) only considered when running 
+the analysis on a regular server; if true it indicates that the analysis does not stop when the user 
+logs out; still possible to check the progress of the analysis or to kill the process (instructions on 
+how to do it are given when running the analysis).
 ```
 Logical parameters are "splitRegion", "zonalStat" and "nohup"; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (maxTravelTime) must be separated by commas and contained within square brackets.
 

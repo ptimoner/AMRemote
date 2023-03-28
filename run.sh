@@ -2,7 +2,7 @@
 
 # Define the function to check if a variable is a boolean ()
 function is_boolean {
-  RESP=$(jq -r --arg VAR "$1" '.[$VAR]' "$RUN_DIR/inputs.json")
+  local RESP=$(jq -r --arg VAR "$1" '.[$VAR]' "$RUN_DIR/inputs.json")
   if [[ -z $RESP ]]
   then
     RESP=false
@@ -10,7 +10,7 @@ function is_boolean {
   #  Define the regular expression for matching boolean values
     BOOLEAN_REGEX="^(true|false)$"
     # Check if the input variable matches the boolean regex
-    if [[ ! $RESP =~ "$BOOLEAN_REGEX" ]]
+    if [[ ! $RESP =~ $BOOLEAN_REGEX ]]
     then
       echo "$1 is not a boolean (true/false)."
       exit 2
@@ -23,16 +23,25 @@ function is_boolean {
 RUN_DIR=$(realpath $(dirname $0))
 
 # Is slurm management available (cluster)
+NOHUP=is_boolean "nohup"
+SPLIT=is_boolean "splitRegion"
+ZONAL_STAT=is_boolean "zonalStat"
+echo $NOHUP
+echo $SPLIT
+echo $ZONAL_STAT
+exit
+
 if command -v sinfo >/dev/null 2>&1
   then
   echo "Slurm Workload Manager is installed"
+  if [[ -z  ]]
   echo "'nohup' argument will be ignored"
   HPC=true
 else
   HPC=false
   # Do we want to be able to close the terminal without killing the process
-  NOHUP=$(jq -r '.nohup' "$RUN_DIR/inputs.json")
-  is_boolean "$NOHUP"
+  #NOHUP=$(jq -r '.nohup' "$RUN_DIR/inputs.json")
+  NOHUP=is_boolean "nohup"
 fi
 
 # Get AccessMod image

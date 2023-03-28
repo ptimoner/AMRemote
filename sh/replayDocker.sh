@@ -37,3 +37,5 @@ docker run \
   -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   $IMAGE \
   Rscript /batch/replayDocker.R "${PARAM[@]}"
+  echo $! > "$OUTPUT_DIR/pid.txt"
+  echo "To kill the process, type: kill \$(cat $OUTPUT_DIR/pid.txt)"

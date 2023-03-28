@@ -184,9 +184,7 @@ then
   if [[ $NOHUP == "true" ]]
   then
     nohup bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" &
-    echo $! > "$OUTPUT_DIR/pid.txt"
     echo "To monitor the progress of your analysis, type: cat $OUTPUT_DIR/nohup.out"
-    echo "To kill the process, type: kill \$(cat $OUTPUT_DIR/pid.txt)"
   else
     bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
   fi

@@ -1,7 +1,7 @@
 # AMRemote
-Standard tool to run AccessMod analyses through the replay function. It can be run on any server with docker installed, on
-any HPC (cluster) with Singularity available, or on your local machine. A Unix-like OS on your machine is required, either to run the replay or to
-interact with a server/cluster. Available options are: accesssibility analysis, accessibility analysis + zonal statistics, coverage analysis (either splitting by region or not). Considering multiple maximum travel times is possible.
+Standard tool to run AccessMod analyses through the replay function. It can be run on a your local machine, a server or a cluster. A Unix-like OS on your machine is required, either to run the replay or to interact with a server/cluster. Docker (server, local machine) or Singularity (cluster) is also required.
+
+Available options are: accesssibility analysis, accessibility analysis + zonal statistics, coverage analysis (either splitting by region or not). Considering multiple maximum travel times is also possible.
 
 ## Inputs
 

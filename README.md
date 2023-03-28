@@ -96,7 +96,7 @@ the analysis on a regular server; if true it indicates that the analysis does no
 logs out; still possible to check the progress of the analysis or to kill the process (instructions on 
 how to do it are given when running the analysis).
 ```
-Logical parameters are "splitRegion", "zonalStat" and "nohup"; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (maxTravelTime) must be separated by commas and contained within square brackets.
+Juste replace the values. Logical parameters are "splitRegion", "zonalStat" and "nohup"; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (maxTravelTime) must be separated by commas and contained within square brackets. Empty values must be provided with double quotes: ""
 
 Once you set the parameters, use the following command the run the replay analysis.
 

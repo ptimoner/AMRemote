@@ -9,7 +9,6 @@ RUN_DIR=${PARAM[3]}
 OUTPUT_DIR=${PARAM[4]}
 NOHUP=${PARAM[13]}
 
-
 # As the container will be run as a non-root user, we need to bind the /data folder
 # If not, we don't have the right to access it (by default volume mounted to the root)
 # Get the current date and time in the format YYYY-MM-DD-HH-MM-SS
@@ -42,7 +41,7 @@ then
     -v $REPLAY_SCRIPT_FILE:/batch/replay.R \
     -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     $IMAGE \
-    nohup Rscript /batch/replay.R "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" & sleep 1s && echo ""
+    nohup Rscript /batch/replay.R "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" 2>&1 & sleep 1s && echo ""
   echo "To monitor the progress of your analysis, type: cat $OUTPUT_DIR/nohup.out"
   echo "To kill the process, use the command: docker stop $RANDOM_ID"
   echo "The container ID ($RANDOM_ID) is saved in $OUTPUT_DIR/docker_id.out"

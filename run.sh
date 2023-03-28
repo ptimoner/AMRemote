@@ -176,15 +176,15 @@ OUTPUT_DIR="$INPUT_DIR/out/$TIMESTAMP"
 mkdir -p "$OUTPUT_DIR"
 
 # Parameters to be passed
-PARAM=("$HPC" "$INPUT_DIR" "$IMAGE" "$RUN_DIR" $OUTPUT_DIR "$MAX_TRAVEL_TIME" "$SPLIT" "$ADMIN_COL" "$ZONAL_STAT" "$INPUT_POP" "$INPUT_ZONE" "$ZONE_ID_FIELD" "$ZONE_LABEL_FIELD")
+PARAM=("$HPC" "$INPUT_DIR" "$IMAGE" "$RUN_DIR" $OUTPUT_DIR "$MAX_TRAVEL_TIME" "$SPLIT" "$ADMIN_COL" "$ZONAL_STAT" "$INPUT_POP" "$INPUT_ZONE" "$ZONE_ID_FIELD" "$ZONE_LABEL_FIELD" "$NOHUP")
 
 # If regular server: replayDocker.sh
 if [[ $HPC == "false" ]]
 then
   if [[ $NOHUP == "true" ]]
   then
-    nohup bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" &
-    echo "To monitor the progress of your analysis, type: cat $OUTPUT_DIR/nohup.out"
+    bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
+
   else
     bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
   fi

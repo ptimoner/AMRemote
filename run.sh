@@ -39,7 +39,9 @@ if command -v sinfo >/dev/null 2>&1
   then
   echo "Slurm Workload Manager is installed"
   if [[ $NOHUP == "true"  ]]
-  echo "'nohup' argument will be ignored"
+  then
+    echo "'nohup' argument will be ignored"
+  fi
   HPC=true
 else
   HPC=false

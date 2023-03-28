@@ -31,7 +31,7 @@ then
   RANDOM_ID=$RANDOM
   echo $RANDOM_ID > "$OUTPUT_DIR/docker_id.out"
   docker run \
-    --name $RANDOM_ID
+    --name $RANDOM_ID \
     --rm \
     --user $(id -u):$(id -g) \
     -v $DATA_DIR:/data \

@@ -175,6 +175,9 @@ OUTPUT_DIR="$INPUT_DIR/out/$TIMESTAMP"
 # Make out directory
 mkdir -p "$OUTPUT_DIR"
 
+# To save the inputs.json in the output directory (so we know what were the parameters)
+cp "$RUN_DIR/inputs.json" "$OUTPUT_DIR/inputs.json"
+
 # Parameters to be passed
 PARAM=("$HPC" "$INPUT_DIR" "$IMAGE" "$RUN_DIR" $OUTPUT_DIR "$MAX_TRAVEL_TIME" "$SPLIT" "$ADMIN_COL" "$ZONAL_STAT" "$INPUT_POP" "$INPUT_ZONE" "$ZONE_ID_FIELD" "$ZONE_LABEL_FIELD" "$NOHUP")
 

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#SBATCH --job-name=replay
 #SBATCH --time=4-00:00:00
 #SBATCH --partition=public-cpu
 #SBATCH --ntasks=1

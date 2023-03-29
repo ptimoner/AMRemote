@@ -45,7 +45,7 @@ then
     TIME_ARRAY=($MAX_TRAVEL_TIME)
     REGION_ARRAY=(${REGIONS//,/ })
     # Initialize the output variable
-    ARRAY_IND=""
+    ARRAY_ID=""
     ADD=10000
     # Loop over each element of a and b
     for i in "${TIME_ARRAY[@]}"
@@ -56,14 +56,14 @@ then
         i_NEW=$((i + ADD))
         j_NEW=$((j + ADD))
         # Concatenate the two elements into a new string
-        ARRAY_IND+="$(printf "%s%s" "$i_NEW" "$j_NEW"),"
+        ARRAY_ID+="$(printf "%s%s" "$i_NEW" "$j_NEW"),"
       done
     done
     # Remove the trailing comma from the output string
-    ARRAY_IND=${ARRAY_IND::-1}
+    ARRAY_ID=${ARRAY_ID::-1}
   else
   # If only split
-  ARRAY_IND=$REGIONS
+  ARRAY_ID=$REGIONS
   fi
 else
 # If no split by region

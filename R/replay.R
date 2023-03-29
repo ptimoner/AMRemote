@@ -31,22 +31,26 @@ split <- as.logical(commandArgs(trailingOnly = TRUE)[7])
 # When multiple times, we replace the maxTravelTime by the JOB ID corresponding to one single maximum travel time
 if (hpc) {
   # This parameter is not empty if job array
-  jobId <- commandArgs(trailingOnly = TRUE)[18]
-  if (nchar(jobId) > 0) {
+  taskID <- as.numeric(commandArgs(trailingOnly = TRUE)[18])
+  # Read the table create in array.sh where we have the correspondence between the array indices and a code that contains information about
+  # the region index and/or the travel time.
+  idTable <- read.table(file.path(pathOut, "ids.txt"), header = FALSE, col.names = c("id", "codeId"), colClasses = c("numeric", "character"))
+  codeId <- idTable$codeId[idTable$id == taskID]
+  if (nchar(codeId) > 0) {
     # We have an array based on region and travel time (no zonal stat possible)
-    if (nchar(jobId) == 10) {
+    if (nchar(codeId) == 10) {
       # convert the number to a string and split it into two substrings
-      sub1 <- substr(jobId, 1, 5)
-      sub2 <- substr(jobId, 6, 10)
+      sub1 <- substr(codeId, 1, 5)
+      sub2 <- substr(codeId, 6, 10)
       # convert each substring back to an integer and subtract 10000
       timeThr <- as.integer(sub1) - 10000
       ind <- as.integer(sub2) - 10000
     } else {
       # If less than 10 character either is region ID or travel time ID
       if (split) {
-        ind <- as.numeric(jobId)
+        ind <- as.numeric(codeId)
       } else {
-        timeThr <- as.numeric(jobId)
+        timeThr <- as.numeric(codeId)
       }
     }
   }

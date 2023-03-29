@@ -45,7 +45,7 @@ then
     TIME_ARRAY=($MAX_TRAVEL_TIME)
     REGION_ARRAY=(${REGIONS//,/ })
     # Initialize the output variable
-    ARRAY_ID=""
+    CODE_ID=""
     ADD=10000
     # Loop over each element of a and b
     for i in "${TIME_ARRAY[@]}"
@@ -56,14 +56,14 @@ then
         i_NEW=$((i + ADD))
         j_NEW=$((j + ADD))
         # Concatenate the two elements into a new string
-        ARRAY_ID+="$(printf "%s%s" "$i_NEW" "$j_NEW"),"
+        CODE_ID+="$(printf "%s%s" "$i_NEW" "$j_NEW"),"
       done
     done
     # Remove the trailing comma from the output string
-    ARRAY_ID=${ARRAY_ID::-1}
+    CODE_ID=${CODE_ID::-1}
   else
   # If only split
-  ARRAY_ID=$REGIONS
+  CODE_ID=$REGIONS
   fi
 else
 # If no split by region
@@ -75,12 +75,12 @@ else
     if [[ ZONAL_STAT == "false" ]]
     then
     # ID will be travel times
-      ARRAY_ID="${MAX_TRAVEL_TIME// /,}"
+      CODE_ID="${MAX_TRAVEL_TIME// /,}"
     else
-      ARRAY_ID=""
+      CODE_ID=""
     fi
   else
-    ARRAY_ID=""
+    CODE_ID=""
   fi
 fi
 
@@ -91,10 +91,26 @@ JOB_ARRAY_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 JOB_NAME="3_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
 
 # Regular job
-if [[ -z "$ARRAY_ID" ]]
+if [[ -z "$CODE_ID" ]]
 then
   sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 else
   # Job array
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output "$OUTPUT_DIR/slum_reports/replay_%a_%A.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
+  # Create a table where we have indices from 1 to ...  and our CODE_ID (that contains the information of regions and/or travel time)
+  # Necessary because we have a maximum index for job array
+  # How many jobs ?
+  N=$(echo "$CODE_ID" | tr ',' ' ' | wc -w)
+  # Array from 1 to N
+  ONETON=$(echo $(seq 1 $N))
+  read -r -a SEQUENCE <<< "$(echo $ONETON)"
+  INDICES=$(echo "$ONETON" | sed 's/ /,/g')
+  # We create an array with our CODE_ID
+  IFS="," read -r -a IDS <<< "$(echo "$CODE_ID")"
+  # We create a table
+  # Iterate over the arrays and write each pair to a file
+  for i in "${!SEQUENCE[@]}"
+  do
+    echo "${SEQUENCE[i]} ${IDS[i]}" >> "$OUTPUT_DIR/ids.txt"
+  done
+  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$INDICES --output="$OUTPUT_DIR/slum_reports/replay_%a_%A.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 fi

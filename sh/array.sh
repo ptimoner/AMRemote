@@ -96,5 +96,5 @@ then
   sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 else
   # Job array
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output --job-name="$JOB_NAME" "$OUTPUT_DIR/slum_reports/replay_%a_%A.out" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
+  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output "$OUTPUT_DIR/slum_reports/replay_%a_%A.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 fi

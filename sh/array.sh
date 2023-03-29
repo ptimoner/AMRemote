@@ -17,7 +17,7 @@ ZONAL_STAT=${PARAM[8]}
 JOB_NAME=${PARAM[14]}
 
 # Do we have multiple travel times (in specific cases we would run a job array)
-if [ ${#MAX_TRAVEL_TIME} -gt 1 ]
+if [ ${#MAX_TRAVEL_TIME[@]} -gt 1 ]
 then
     MULTI_TRAVEL_TIMES=true
 else

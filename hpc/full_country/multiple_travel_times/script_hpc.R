@@ -30,7 +30,7 @@ tt <- as.numeric(commandArgs(trailingOnly=TRUE)[1])
 # Update facility selection
 nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)
 idmsg <- sprintf("%s %s - %s min", nSel, "facilities", tt)
-
+conf$args$maxTravelTime <- tt
 # Print timestamp
 amTimeStamp(idmsg)
 

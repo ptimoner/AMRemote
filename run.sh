@@ -113,7 +113,7 @@ if [[ $SPLIT == "true" ]]
 then
   if [[ $ANALYSIS != 'amCapacityAnalysis' ]]
   then
-    echo "splitRegion can be true only if AccessMod analysis is amCapacityAnalysis"
+    echo "splitRegion can be true only if AccessMod analysis is amCapacityAnalysis; check your config.json file"
     exit 2
   fi
   if [[ -z $ADMIN_COL ]]
@@ -140,7 +140,7 @@ if [[ $ZONAL_STAT == "true" ]]
 then
   if [[ $ANALYSIS != 'amTravelTimeAnalysis' ]]
   then
-    echo "zonalStat can be true only if AccessMod analysis is amTravelTimeAnalysis"
+    echo "zonalStat can be true only if AccessMod analysis is amTravelTimeAnalysis; check your config.json file"
     exit 2
   fi
   if [[ -z $INPUT_POP || -z $INPUT_ZONE || -z $ZONE_ID_FIELD || -z $ZONE_LABEL_FIELD ]]

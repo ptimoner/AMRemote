@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#SBATCH --job-name=array
 #SBATCH --time=60:00
 #SBATCH --partition=shared-cpu
 #SBATCH --ntasks=1
@@ -15,6 +14,7 @@ MAX_TRAVEL_TIME=${PARAM[5]}
 SPLIT=${PARAM[6]}
 OUTPUT_DIR=${PARAM[4]}
 ZONAL_STAT=${PARAM[8]}
+JOB_NAME=${PARAM[14]}
 
 # Do we have multiple travel times (in specific cases we would run a job array)
 if [ ${#MAX_TRAVEL_TIME} -gt 1 ]
@@ -28,7 +28,7 @@ fi
 # Check if split by region
 if [ $SPLIT == "true" ]
 then
-  JOB_REGIONS_ID=${PARAM[14]}
+  JOB_REGIONS_ID=${PARAM[15]}
   # Wait for the first job to complete before continuing
   scontrol wait jobid="$JOB_REGIONS_ID"
   # Path to the created regions.json file (with get_regions.R)
@@ -85,13 +85,16 @@ else
 fi
 
 # Get the ID of this second job to be sure to run the last sbatch after this one is finished
-JOB_ARRAY_ID=$(squeue -h -u $USER -o %i -n array)
+JOB_ARRAY_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
+
+# Make random jobname (so we avoid conflict if we run multiple analysis at the same time)
+JOB_NAME="replay_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
 
 # Regular job
 if [[ -z "$ARRAY_ID" ]]
 then
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
+  sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 else
   # Job array
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output "$OUTPUT_DIR/slum_reports/replay_%a_%A.out" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
+  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$JOB_ARRAY_ID --output --job-name="$JOB_NAME" "$OUTPUT_DIR/slum_reports/replay_%a_%A.out" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 fi

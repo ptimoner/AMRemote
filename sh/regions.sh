@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#SBATCH --job-name=regions
 #SBATCH --time=60:00
 #SBATCH --partition=shared-cpu
 #SBATCH --ntasks=1
@@ -20,6 +19,7 @@ IMAGE=${PARAM[2]}
 RUN_DIR=${PARAM[3]}
 OUTPUT_DIR=${PARAM[4]}
 ADMIN_COL=${PARAM[7]}
+JOB_NAME=${PARAM[14]}
 
 # As the container will be run as a non-root user, we need to bind the /data folder
 # If not, we don't have the right to access it (by default volume mounted to the root)
@@ -51,10 +51,15 @@ singularity run \
   Rscript /batch/regions.R "$ADMIN_COL"
 
 # Get the ID of this first job
-JOB_REGIONS_ID=$(squeue -h -u $USER -o %i -n regions)
+
+JOB_REGIONS_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 
 # Pass all parameters + jobID
 PARAM+=("$JOB_REGIONS_ID")
 
+# Make random jobname (so we avoid conflict when accessing job id using the name, when we run multiple analysis at the same time)
+JOB_NAME="array_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
+PARAM[14]=$JOB_NAME
+
 # Submit the second job (array.sh to prepare the inputs and run singularity for the analysis) with a dependency on the first job
-sbatch --dependency=afterok:${JOB_REGIONS_ID} --output "$OUTPUT_DIR/slum_reports/array.out" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
+sbatch --dependency=afterok:${JOB_REGIONS_ID} --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"

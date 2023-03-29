@@ -191,17 +191,20 @@ then
 else
   # Make directory for slurm reports
   mkdir -p "$OUTPUT_DIR/slum_reports"
-
+  # Make random jobname (so we avoid conflict when accessing job id using the name, when we run multiple analysis at the same time)
+  JOB_NAME="region_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
+  PARAM+=("$JOB_NAME")
   # If split by region, run first regions.sh
   if [[ $SPLIT == "true" ]]
   then
-    sbatch --output "$OUTPUT_DIR/slum_reports/regions.out" "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
+    sbatch --output "$OUTPUT_DIR/slum_reports/regions.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
   else
     # To maintain same number of parameters that are passed through the different scripts
+    # JOB_ID 
     JOB_REGIONS_ID=""
     PARAM+=("$JOB_REGIONS_ID")
     # Run array.sh to check prepare the inputs and run singularity
-    sbatch --output "$OUTPUT_DIR/slum_reports/array.out" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
+    sbatch --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
   fi
 fi
 

@@ -45,15 +45,13 @@ if (hpc) {
       # If less than 10 character either is region ID or travel time ID
       if (split) {
         ind <- as.numeric(jobId)
-        # Parse regions.json
-        regions <- fromJSON(pathRegions)
-        hfDf <- regions$hfDf
       } else {
-        maxTravelTime <- as.numeric(jobId)
+        timeThr <- as.numeric(jobId)
       }
     }
   }
 }
+
 
 # If Zonal stat we keep set the time for modelling the travel time raster to 0
 # Zonal stat can be true only if analysis is "accessibility"
@@ -77,6 +75,9 @@ for (tt in timeThr) {
     replay(conf, tt, pathOut)
   } else {
     if (hpc) {
+      # Parse regions.json
+      regions <- fromJSON(pathRegions)
+      hfDf <- regions$hfDf
       byRegion(hfDf, ind, conf, pathOut, tt)
     } else {
       # If split region

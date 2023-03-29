@@ -29,7 +29,7 @@ fi
 if [ $SPLIT == "true" ]
 then
   JOB_REGIONS_ID=${PARAM[15]}
-  # Wait for the first job to complete before continuing
+  # Wait for the first job to complete before continuing (safety)
   scontrol wait "$JOB_REGIONS_ID"
   # Path to the created regions.json file (with get_regions.R)
   REGION_JSON_FILE="$OUTPUT_DIR/regions.json"

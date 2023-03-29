@@ -11,6 +11,9 @@ replay <- function (conf, tt, pathOut) {
   nSel <- sum(conf$args$tableFacilities$amSelect == TRUE)
   idmsg <- sprintf("%s %s - %s min", nSel, "facilities", tt)
   
+  # Update maxTravelTime
+  conf$args$maxTravelTime <- tt
+  
   # Print timestamp
   amTimeStamp(idmsg)
   

@@ -192,7 +192,7 @@ else
   # Make directory for slurm reports
   mkdir -p "$OUTPUT_DIR/slum_reports"
   # If split by region, run first regions.sh
-  if [[ SPLIT == "true" ]]
+  if [[ $SPLIT == "true" ]]
   then
     sbatch --output "$OUTPUT_DIR/slum_reports/regions.out" "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
   else

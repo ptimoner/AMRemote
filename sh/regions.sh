@@ -23,15 +23,20 @@ ADMIN_COL=${PARAM[7]}
 
 # As the container will be run as a non-root user, we need to bind the /data folder
 # If not, we don't have the right to access it (by default volume mounted to the root)
-mkdir -p "$INPUT_DIR/AMdata/logs"
-mkdir -p "$INPUT_DIR/AMdata/cache"
-mkdir -p "$INPUT_DIR/AMdata/dbgrass"
+
+# Make a tempdir for Accessmod DB
+TEMP_DIR=$(mktemp -d)
+
+mkdir -p "$TEMP_DIR/logs"
+mkdir -p "$TEMP_DIR/cache"
+mkdir -p "$TEMP_DIR/dbgrass"
 
 # Files to be binded
-DATA_DIR="$INPUT_DIR/AMdata"
+DATA_DIR="$TEMP_DIR"
 PROJECT_FILE="$INPUT_DIR/project.am5p"
 R_SCRIPT_FILE="$RUN_DIR/R/regions.R"
 CONFIG_FILE="$INPUT_DIR/config.json"
+FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 
 # Run image with binded inputs and launch R script with ADMIN_COL parameter
 singularity run \
@@ -39,6 +44,7 @@ singularity run \
   -B $PROJECT_FILE:/batch/project.am5p \
   -B $CONFIG_FILE:/batch/config.json \
   -B $R_SCRIPT_FILE:/batch/regions.R \
+  -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   -B $DATA_DIR:/data \
   --pwd /app \
   $IMAGE \

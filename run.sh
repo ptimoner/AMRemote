@@ -191,6 +191,7 @@ then
 else
   # Make directory for slurm reports
   mkdir -p "$OUTPUT_DIR/slum_reports"
+
   # If split by region, run first regions.sh
   if [[ $SPLIT == "true" ]]
   then

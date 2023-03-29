@@ -19,8 +19,9 @@ RUN_DIR=${PARAM[3]}
 SPLIT=${PARAM[6]}
 OUTPUT_DIR=${PARAM[4]}
 IMAGE=${PARAM[2]}
-echo $IMAGE
 
+# Make a tempdir for Accessmod DB
+TEMP_DIR=$(mktemp -d)
 
 # Is this a regular job or a job array
 if [[ -n $SLURM_ARRAY_TASK_ID ]]
@@ -30,20 +31,27 @@ then
   PARAM+=("$JOB_ID") 
   # New directories for binding data folder (bypass denied access for writing) and out directory
   # We need a database per job to avoid conflict (in the end of this script we remove these folders)
-  mkdir -p "$INPUT_DIR/AMdata/temp/$JOB_ID/dbgrass"
-  mkdir -p "$INPUT_DIR/AMdata/temp/$JOB_ID/cache"
-  mkdir -p "$INPUT_DIR/AMdata/temp/$JOB_ID/logs"
-  # Directory to be binded
-  DATA_DIR="$INPUT_DIR/AMdata/temp/$JOB_ID"
+  # mkdir -p "$TEMP_DIR/AMdata/temp/$JOB_ID/dbgrass"
+  # mkdir -p "$TEMP_DIR/dbgrass"
+  # mkdir -p "$TEMP_DIR/cache"
+  # mkdir -p "$TEMP_DIR/logs"
+  # # Directory to be binded
+  # DATA_DIR="$TEMP_DIR"
 else
-  mkdir -p "$INPUT_DIR/AMdata/dbgrass"
-  mkdir -p "$INPUT_DIR/AMdata/cache"
-  mkdir -p "$INPUT_DIR/AMdata/logs"
-  DATA_DIR="$INPUT_DIR/AMdata"
+  # mkdir -p "$INPUT_DIR/AMdata/dbgrass"
+  # mkdir -p "$INPUT_DIR/AMdata/cache"
+  # mkdir -p "$INPUT_DIR/AMdata/logs"
+  # DATA_DIR="$INPUT_DIR/AMdata"
   JOB_ID=""
   # So we we have the same number of parameters that are passed to the R script
   PARAM+=("$JOB_ID")
 fi
+
+mkdir -p "$TEMP_DIR/dbgrass"
+mkdir -p "$TEMP_DIR/cache"
+mkdir -p "$TEMP_DIR/logs"
+# Directory to be binded
+DATA_DIR="$TEMP_DIR"
 
 # Other dir/files to be binded
 PROJECT_FILE="$INPUT_DIR/project.am5p"
@@ -82,8 +90,8 @@ else
   Rscript /batch/replay.R "${PARAM[@]}"
 fi
 
-# Remove duplicated data (dbgrass, logs, cache)
-if [[ -n $SLURM_ARRAY_TASK_ID ]]
-then
-  rm -r "$INPUT_DIR/AMdata/temp/"
-fi
+# # Remove duplicated data (dbgrass, logs, cache)
+# if [[ -n $SLURM_ARRAY_TASK_ID ]]
+# then
+#   rm -r "$INPUT_DIR/AMdata/temp/"
+# fi

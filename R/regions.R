@@ -2,6 +2,7 @@
 
 # Load accessmod environment -----------------
 source("global.R")
+source("/batch/functions.R")
 options(warn=-1)
 
 # Get column name for regions

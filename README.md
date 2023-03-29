@@ -1,7 +1,7 @@
 # AMRemote
-Standard tool to run AccessMod analyses through the replay function. It can be run on a your local machine, a server or a cluster. A Unix-like OS on your machine is required, either to run the replay or to interact with a server/cluster. Docker (server, local machine) or Singularity (cluster) is also required.
+Standard tool to run AccessMod analyses through the replay function. It can be run on a your local machine, a regular server or a cluster. A Unix-like OS on your machine is required, either to run the replay or to interact with a server/cluster. Docker (server, local machine) or Singularity (cluster) is also required.
 
-Available options are: accesssibility analysis, accessibility analysis + zonal statistics, coverage analysis (either splitting by region or not). Considering multiple maximum travel times is also possible.
+Replay is available for any kind of analysis. With accessibility analysis we can choose whether we want to run a zonal statistic analysis right after or not. For coverage analysis we can decide to split the analysis by region (recommended for very large countries and when a cluster is available so different jobs can be sent in parallel). Launching a replay considering multiple maximum travel times is also possible.
 
 ## Inputs
 
@@ -20,7 +20,7 @@ $ scp -r C:/myname/replay <username>@<serveraddress>:~/
 
 ## AccessMod image
 
-On the HPC (HPC uses singularity instead of Docker):
+On the cluster (cluster uses Singularity instead of Docker):
 
 ```txt 
 $ ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
@@ -50,13 +50,15 @@ $ git pull AMRemote
 
 ## Procedure
 
-Within the AMRemote folder, you will find:
+Within the AMRemote folder, you will find (among others):
 
 ```txt 
 |-- run.sh             -> to launch the replay analysis
 |-- inputs.json        -> file with editable parameters
 ```
-Open the inputs.json and modify the parameters *without changing the format*.
+These are the only two files you need to interact with to run the replay function.
+
+Open the inputs.json and modify the parameters **without changing the format**.
 
 ```txt 
 $ nano inputs.json
@@ -96,7 +98,7 @@ the analysis on a regular server; if true it indicates that the analysis does no
 logs out; still possible to check the progress of the analysis or to kill the process (instructions on 
 how to do it are given when running the analysis).
 ```
-Juste replace the values. Logical parameters are "splitRegion", "zonalStat" and "nohup"; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (maxTravelTime) must be separated by commas and contained within square brackets. Empty values must be provided with double quotes: ""
+Just replace the values accordingly. Logical parameters are "splitRegion", "zonalStat" and "nohup"; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (maxTravelTime) must be separated by commas and contained within square brackets. Empty values must always be provided with double quotes: ""
 
 Once you set the parameters, use the following command the run the replay analysis.
 
@@ -105,7 +107,24 @@ $ bash run.sh
 ```
 An output folder will be created within the input folder.
 
-The script will detect if it is running on a cluster or not, and will use Docker or Singularity accordingly. On a cluster, progress can be checked in the '.out' file saved in folder called slum_reports in the output folder. On the cluster, use the command scancel to cancel the submitted job if required. On a regular server, when the parameter 'nohup' is set true, the user can still check the progress of the analysis or kill the process (instructions on how to do it are given when running the analysis).
+The script will detect if it is running on a cluster or not, and will use Docker or Singularity accordingly. On a cluster you can check the ID and the status of the submitted job using the following command:
+
+```txt 
+$ squeue -u $USER
+```
+
+If the job has started you can check the progress of the analysis by reading the ".out" file corresponding to the job which is dynamically saved in the subfolder 'slum_reports' created within the output folder.
+
+```txt 
+$ cat <slum_report_folder>/<outfile>
+```
+
+You can cancel the job whenever is required using the command:
+
+```txt 
+$ scancel <jobid>
+```
+On a regular server, when the parameter 'nohup' is set true, the user can still check the progress of the analysis or kill the process (instructions on how to do it are given when the user executes the run.sh script).
 
 ## Outputs
 

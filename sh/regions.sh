@@ -58,7 +58,7 @@ JOB_REGIONS_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 PARAM+=("$JOB_REGIONS_ID")
 
 # Make random jobname (so we avoid conflict when accessing job id using the name, when we run multiple analysis at the same time)
-JOB_NAME="array_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
+JOB_NAME="2_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
 PARAM[14]=$JOB_NAME
 
 # Submit the second job (array.sh to prepare the inputs and run singularity for the analysis) with a dependency on the first job

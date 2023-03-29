@@ -88,7 +88,7 @@ fi
 JOB_ARRAY_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 
 # Make random jobname (so we avoid conflict if we run multiple analysis at the same time)
-JOB_NAME="replay_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
+JOB_NAME="3_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
 
 # Regular job
 if [[ -z "$ARRAY_ID" ]]

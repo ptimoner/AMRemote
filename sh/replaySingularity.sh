@@ -58,6 +58,9 @@ R_SCRIPT_FILE="$RUN_DIR/R/replay.R"
 CONFIG_FILE="$INPUT_DIR/config.json"
 FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 
+# To save the inputs.json in the output directory (so we know what were the parameters)
+cp "$RUN_DIR/inputs.json" "$OUTPUT_DIR/inputs.json"
+
 # If split we need to bind the regions.json file as well
 if [[ $SPLIT == "true" ]]
 then

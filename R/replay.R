@@ -31,7 +31,7 @@ split <- as.logical(commandArgs(trailingOnly = TRUE)[7])
 # When multiple times, we replace the maxTravelTime by the JOB ID corresponding to one single maximum travel time
 if (hpc) {
   # This parameter is not empty if job array
-  taskID <- as.numeric(commandArgs(trailingOnly = TRUE)[18])
+  taskID <- as.numeric(commandArgs(trailingOnly = TRUE)[30])
   # Read the table create in array.sh where we have the correspondence between the array indices and a code that contains information about
   # the region index and/or the travel time.
   idTable <- read.table(file.path(pathOut, "ids.txt"), header = FALSE, col.names = c("id", "codeId"), colClasses = c("numeric", "character"))

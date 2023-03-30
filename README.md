@@ -97,6 +97,7 @@ AccessMod project
 the analysis on a regular server; if true it indicates that the analysis does not stop when the user 
 logs out; still possible to check the progress of the analysis or to kill the process (instructions on 
 how to do it are given when running the analysis).
+
 ```
 Just replace the values accordingly. Logical parameters are "splitRegion", "zonalStat" and "nohup"; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (maxTravelTime) must be separated by commas and contained within square brackets. Empty values must always be provided with double quotes: ""
 

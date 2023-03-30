@@ -27,7 +27,7 @@ if [[ -n $SLURM_ARRAY_TASK_ID ]]
 then
   JOB_ID=$SLURM_ARRAY_TASK_ID
   # Get the ID so in the R script we can know either the region index or the travel time
-  PARAM+=("$JOB_ID") 
+  PARAM[29]="$JOB_ID"
   # New directories for binding data folder (bypass denied access for writing) and out directory
   # We need a database per job to avoid conflict (in the end of this script we remove these folders)
   # mkdir -p "$TEMP_DIR/AMdata/temp/$JOB_ID/dbgrass"
@@ -41,9 +41,9 @@ else
   # mkdir -p "$INPUT_DIR/AMdata/cache"
   # mkdir -p "$INPUT_DIR/AMdata/logs"
   # DATA_DIR="$INPUT_DIR/AMdata"
-  JOB_ID=""
+  # JOB_ID=""
   # So we we have the same number of parameters that are passed to the R script
-  PARAM+=("$JOB_ID")
+  # PARAM+=("$JOB_ID")
 fi
 
 mkdir -p "$TEMP_DIR/dbgrass"
@@ -61,7 +61,7 @@ FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 # If split we need to bind the regions.json file as well
 if [[ $SPLIT == "true" ]]
 then
-  REGION_JSON_FILE=${PARAM[16]}
+  REGION_JSON_FILE=${PARAM[28]}
   # Run image with binded inputs and launch R script
   echo "Start processing AccessMod Job"
   singularity run \

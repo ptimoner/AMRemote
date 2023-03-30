@@ -43,6 +43,46 @@ if command -v sinfo >/dev/null 2>&1
     echo "'nohup' argument will be ignored"
   fi
   HPC=true
+  # Parameters for submitting the jobs will be retrieve; the max time will checked
+  # But others not. The user is responsible to check carefully that they inputs in
+  # the hpc.json file are correct.
+  # Get parameters for preliminary process
+  PP_NAME=$(jq -r '.Preliminary.name' "$RUN_DIR/hpc.json")
+  PP_TIME=$(jq -r '.Preliminary.time' "$RUN_DIR/hpc.json")
+  PP_NTASKS=$(jq -r '.Preliminary.ntasks' "$RUN_DIR/hpc.json")
+  PP_CPUS_TASK=$(jq -r '.Preliminary.cpus_per_task' "$RUN_DIR/hpc.json")
+  PP_MEM=$(jq -r '.Preliminary.mem' "$RUN_DIR/hpc.json")
+  PP_MAIL=$(jq -r '.Preliminary.mail_type' "$RUN_DIR/hpc.json")
+  # Get the maximum time allowed for the partition from Slurm
+  ALLOWED_TIME=$(scontrol show partition "${PP_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
+  # Convert the times to seconds for comparison
+  TIME_SEC=$(date -u -d "${PP_TIME}" +"%s")
+  ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
+  # Check if the partition time is less than or equal to the maximum time allowed
+  if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
+  then
+    echo "Maximum time allowed in $PREL_MAIN_NAME (preliminary process) is $ALLOWED_TIME; please check the hpc.json file"
+    exit 2
+  fi
+  # Get parameters for main analysis
+  PM_NAME=$(jq -r '.Main.name' "$RUN_DIR/hpc.json")
+  PM_TIME=$(jq -r '.Main.time' "$RUN_DIR/hpc.json")
+  PM_NTASKS=$(jq -r '.Main.ntasks' "$RUN_DIR/hpc.json")
+  PM_CPUS_TASK=$(jq -r '.Main.cpus_per_task' "$RUN_DIR/hpc.json")
+  PM_MEM=$(jq -r '.Main.mem' "$RUN_DIR/hpc.json")
+  PM_MAIL=$(jq -r '.Main.mail_type' "$RUN_DIR/hpc.json"
+  # Get the maximum time allowed for the partition from Slurm
+  ALLOWED_TIME=$(scontrol show partition "${PM_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
+  # Convert the times to seconds for comparison
+  TIME_SEC=$(date -u -d "${PM_TIME}" +"%s")
+  ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
+  # Check if the partition time is less than or equal to the maximum time allowed
+  if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
+  then
+    echo "Maximum time allowed in $PM_NAME (main analysis) is $ALLOWED_TIME; please check the hpc.json file"
+    exit 2
+  fi
+fi
 else
   HPC=false
 fi
@@ -178,13 +218,40 @@ mkdir -p "$OUTPUT_DIR"
 # To save the inputs.json in the output directory (so we know what were the parameters)
 cp "$RUN_DIR/inputs.json" "$OUTPUT_DIR/inputs.json"
 
+
+# Create a large list of parameters with empty elements so whenever we want to add a new one, the parameters can keep their indices
+# Other parameters are added in subsequent script, so adding one here forces us to modify the index of the new parameters added in
+# subsequent scripts. See code_param.csv
+PARAM=()
+# Append empty elements to the array until it has a size of 30
+while [[ ${#my_array[@]} -lt 40 ]]
+do
+  PARAM+=('')
+done
+
+# Populate our list of parameters
+PARAM[0]="$HPC"
+PARAM[1]="$INPUT_DIR"
+PARAM[2]="$IMAGE"
+PARAM[3]="$RUN_DIR"
+PARAM[4]="$OUTPUT_DIR"
+PARAM[5]="$MAX_TRAVEL_TIME"
+PARAM[6]="$SPLIT"
+PARAM[7]="$ADMIN_COL"
+PARAM[8]="$ZONAL_STAT"
+PARAM[9]="$INPUT_POP"
+PARAM[10]="$INPUT_ZONE"
+PARAM[11]="$ZONE_ID_FIELD"
+PARAM[12]="$ZONE_LABEL_FIELD"
+PARAM[13]="$NOHUP"
+
 # Parameters to be passed
-PARAM=("$HPC" "$INPUT_DIR" "$IMAGE" "$RUN_DIR" $OUTPUT_DIR "$MAX_TRAVEL_TIME" "$SPLIT" "$ADMIN_COL" "$ZONAL_STAT" "$INPUT_POP" "$INPUT_ZONE" "$ZONE_ID_FIELD" "$ZONE_LABEL_FIELD" "$NOHUP")
+# PARAM=("$HPC" "$INPUT_DIR" "$IMAGE" "$RUN_DIR" $OUTPUT_DIR "$MAX_TRAVEL_TIME" "$SPLIT" "$ADMIN_COL" "$ZONAL_STAT" "$INPUT_POP" "$INPUT_ZONE" "$ZONE_ID_FIELD" "$ZONE_LABEL_FIELD" "$NOHUP")
 
 # If regular server: replayDocker.sh
-if [[ $HPC == "false" ]]
+if [[ "$HPC" == "false" ]]
 then
-  if [[ $NOHUP == "true" ]]
+  if [[ "$NOHUP" == "true" ]]
   then
     bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
 
@@ -192,23 +259,56 @@ then
     bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
   fi
 else
+  # Preliminaray jobs
+  PARAM[14]="$PP_NAME"
+  PARAM[15]="$PP_TIME"
+  PARAM[16]="$PP_NTASKS"
+  PARAM[17]="$PP_CPUS_TASK"
+  PARAM[18]="$PP_MEM"
+  PARAM[19]="$PP_MAIL"
+  # Main jobs
+  PARAM[20]="$PM_NAME"
+  PARAM[21]="$PM_TIME"
+  PARAM[22]="$PM_NTASKS"
+  PARAM[23]="$PM_CPUS_TASK"
+  PARAM[24]="$PM_MEM"
+  PARAM[25]="$PM_MAIL"
+  
   # Make directory for slurm reports
   mkdir -p "$OUTPUT_DIR/slum_reports"
   # Make random jobname (so we avoid conflict when accessing job id using the name, when we run multiple analysis at the same time)
   JOB_NAME="1_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
-  PARAM+=("$JOB_NAME")
+  PARAM[26]="$JOB_NAME"
   # If split by region, run first regions.sh
   if [[ $SPLIT == "true" ]]
   then
-    sbatch --output "$OUTPUT_DIR/slum_reports/regions.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
+    sbatch \
+    --output="$OUTPUT_DIR/slum_reports/regions.out" \
+    --job-name="$JOB_NAME" \
+    --partition="$PP_NAME" \
+    --time="$PP_TIME" \
+    --ntasks="$PP_NTASK" \
+    --cpus-per-task="$PP_CPUS_TASK" \
+    --mem="$PP_MEM" \
+    --mail-type="$PP_MAIL" \
+    "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
+    # sbatch --output "$OUTPUT_DIR/slum_reports/regions.out" --job-name="$JOB_NAME" --partition="$PP_NAME" --time="$PP_TIME" "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
   else
-    # To maintain same number of parameters that are passed through the different scripts
-    # JOB_ID 
-    JOB_REGIONS_ID=""
-    PARAM+=("$JOB_REGIONS_ID")
+    # # To maintain same number of parameters that are passed through the different scripts
+    # # JOB_ID 
+    # JOB_REGIONS_ID=""
+    # PARAM+=("$JOB_REGIONS_ID")
     # Run array.sh to check prepare the inputs and run singularity
-    sbatch --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
+    sbatch --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" --partition="$PP_NAME" --time="$PP_TIME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
+    sbatch \
+    --output="$OUTPUT_DIR/slum_reports/array.out" \
+    --job-name="$JOB_NAME" \
+    --partition="$PP_NAME" \
+    --time="$PP_TIME" \
+    --ntasks="$PP_NTASK" \
+    --cpus-per-task="$PP_CPUS_TASK" \
+    --mem="$PP_MEM" \
+    --mail-type="$PP_MAIL" \
+    "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
   fi
 fi
-
-    

@@ -1,12 +1,5 @@
 #!/bin/bash
 
-#SBATCH --time=60:00
-#SBATCH --partition=shared-cpu
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=10000
-#SBATCH --mail-type=NONE
-
 # Load modules
 ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
 
@@ -19,7 +12,13 @@ IMAGE=${PARAM[2]}
 RUN_DIR=${PARAM[3]}
 OUTPUT_DIR=${PARAM[4]}
 ADMIN_COL=${PARAM[7]}
-JOB_NAME=${PARAM[14]}
+JOB_NAME=${PARAM[26]}
+PP_NAME=${PARAM[14]}
+PP_TIME=${PARAM[15]}
+PP_NTASKS=${PARAM[16]}
+PP_CPU_TASK=${PARAM[17]}
+PP_MEM=${PARAM[18]}
+PP_MAIL=${PARAM[19]}
 
 # As the container will be run as a non-root user, we need to bind the /data folder
 # If not, we don't have the right to access it (by default volume mounted to the root)
@@ -54,12 +53,22 @@ singularity run \
 
 JOB_REGIONS_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 
-# Pass all parameters + jobID
-PARAM+=("$JOB_REGIONS_ID")
+# jobID parameter
+PARAM[27]=("$JOB_REGIONS_ID")
 
 # Make random jobname (so we avoid conflict when accessing job id using the name, when we run multiple analysis at the same time)
 JOB_NAME="2_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
-PARAM[14]=$JOB_NAME
+PARAM[26]=$JOB_NAME
 
 # Submit the second job (array.sh to prepare the inputs and run singularity for the analysis) with a dependency on the first job
-sbatch --dependency=afterok:${JOB_REGIONS_ID} --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
+sbatch \
+  --dependency=afterok:${JOB_REGIONS_ID} \
+  --output="$OUTPUT_DIR/slum_reports/array.out" \
+  --job-name="$JOB_NAME" \
+  --partition="$PP_NAME" \
+  --time="$PP_TIME" \
+  --ntasks="$PP_NTASK" \
+  --cpus-per-task="$PP_CPUS_TASK" \
+  --mem="$PP_MEM" \
+  --mail-type="$PP_MAIL" \
+  "$RUN_DIR/sh/array.sh" "${PARAM[@]}"

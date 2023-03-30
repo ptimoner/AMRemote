@@ -1,12 +1,5 @@
 #!/bin/bash
 
-#SBATCH --time=60:00
-#SBATCH --partition=shared-cpu
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=10000
-#SBATCH --mail-type=NONE
-
 # Passed parameters
 PARAM=("${@}")
 RUN_DIR=${PARAM[3]}
@@ -14,7 +7,12 @@ MAX_TRAVEL_TIME=${PARAM[5]}
 SPLIT=${PARAM[6]}
 OUTPUT_DIR=${PARAM[4]}
 ZONAL_STAT=${PARAM[8]}
-JOB_NAME=${PARAM[14]}
+PM_NAME=${PARAM[20]}
+PM_TIME=${PARAM[21]}
+PM_NTASKS=${PARAM[22]}
+PM_CPU_TASK=${PARAM[23]}
+PM_MEM=${PARAM[24]}
+PM_MAIL=${PARAM[25]}
 
 # Do we have multiple travel times (in specific cases we would run a job array)
 if [ ${#MAX_TRAVEL_TIME[@]} -gt 1 ]
@@ -28,7 +26,7 @@ fi
 # Check if split by region
 if [ $SPLIT == "true" ]
 then
-  JOB_REGIONS_ID=${PARAM[15]}
+  JOB_REGIONS_ID=${PARAM[27]}
   # Wait for the first job to complete before continuing (safety)
   scontrol wait "$JOB_REGIONS_ID"
   # Path to the created regions.json file (with get_regions.R)
@@ -36,7 +34,7 @@ then
   # Get region indices
   REGIONS=$(cat "$REGION_JSON_FILE" | jq -r '.index | join(",")')
   # Pass all parameters + JSON file path (required in R script)
-  PARAM+=("$REGION_JSON_FILE")
+  PARAM[28]="$REGION_JSON_FILE"
   if [[ $MULTI_TRAVEL_TIMES == "true" ]]
   then
     # We want to be able to separate then the time and the region index
@@ -68,8 +66,8 @@ then
 else
 # If no split by region
 # To maintain same number of parameters that are passed through the different scripts
-  REGION_JSON_FILE=""
-  PARAM+=("$REGION_JSON_FILE")
+  # REGION_JSON_FILE=""
+  # PARAM+=("$REGION_JSON_FILE")
   if [[ MULTI_TRAVEL_TIMES == "true" ]]
   then
     if [[ ZONAL_STAT == "false" ]]
@@ -93,7 +91,17 @@ JOB_NAME="3_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"
 # Regular job
 if [[ -z "$CODE_ID" ]]
 then
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --output "$OUTPUT_DIR/slum_reports/replay.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
+sbatch \
+  --dependency=afterok:${JOB_ARRAY_ID} \
+  --output="$OUTPUT_DIR/slum_reports/replay.out" \
+  --job-name="$JOB_NAME" \
+  --partition="$PM_NAME" \
+  --time="$PM_TIME" \
+  --ntasks="$PM_NTASK" \
+  --cpus-per-task="$PM_CPUS_TASK" \
+  --mem="$PM_MEM" \
+  --mail-type="$PM_MAIL" \
+  "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 else
   # Job array
   # Create a table where we have indices from 1 to ...  and our CODE_ID (that contains the information of regions and/or travel time)
@@ -112,5 +120,16 @@ else
   do
     echo "${SEQUENCE[i]} ${IDS[i]}" >> "$OUTPUT_DIR/ids.txt"
   done
-  sbatch --dependency=afterok:${JOB_ARRAY_ID} --array=$INDICES --output="$OUTPUT_DIR/slum_reports/replay_%a_%A.out" --job-name="$JOB_NAME" "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
+  sbatch \
+  --dependency=afterok:${JOB_ARRAY_ID} \
+  --array="$INDICES"
+  --output="$OUTPUT_DIR/slum_reports/replay_%a_%A.out" \
+  --job-name="$JOB_NAME" \
+  --partition="$PM_NAME" \
+  --time="$PM_TIME" \
+  --ntasks="$PM_NTASK" \
+  --cpus-per-task="$PM_CPUS_TASK" \
+  --mem="$PM_MEM" \
+  --mail-type="$PM_MAIL" \
+  "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 fi

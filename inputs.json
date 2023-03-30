@@ -9,5 +9,7 @@
     "zonalStatZones": "",
     "zonalStatIDField": "",
     "zonalStatLabelField": "",
-    "nohup": true
+    "nohup": true,
+    "partitionPreliminary": "shared-cpu",
+    "partitionMain": "shared-cpu"
 }

@@ -28,7 +28,7 @@ then
   # mkdir -p "$TEMP_DIR/logs"
   # # Directory to be binded
   # DATA_DIR="$TEMP_DIR"
-else
+fi
   # mkdir -p "$INPUT_DIR/AMdata/dbgrass"
   # mkdir -p "$INPUT_DIR/AMdata/cache"
   # mkdir -p "$INPUT_DIR/AMdata/logs"
@@ -36,7 +36,7 @@ else
   # JOB_ID=""
   # So we we have the same number of parameters that are passed to the R script
   # PARAM+=("$JOB_ID")
-fi
+# fi
 
 mkdir -p "$TEMP_DIR/dbgrass"
 mkdir -p "$TEMP_DIR/cache"

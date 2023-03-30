@@ -123,7 +123,7 @@ else
   done
   sbatch \
   --dependency=afterok:${JOB_ARRAY_ID} \
-  --array="$INDICES"
+  --array="$INDICES" \
   --output="$OUTPUT_DIR/slum_reports/replay_%a_%A.out" \
   --job-name="$JOB_NAME" \
   --partition="$PM_NAME" \

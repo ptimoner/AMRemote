@@ -241,13 +241,7 @@ PARAM[13]="$NOHUP"
 # If regular server: replayDocker.sh
 if [[ "$HPC" == "false" ]]
 then
-  if [[ "$NOHUP" == "true" ]]
-  then
-    bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
-
-  else
-    bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
-  fi
+  bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
 else
   # Preliminaray jobs
   PARAM[14]="$PP_NAME"

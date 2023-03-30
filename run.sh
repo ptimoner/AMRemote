@@ -286,7 +286,7 @@ else
     --job-name="$JOB_NAME" \
     --partition="$PP_NAME" \
     --time="$PP_TIME" \
-    --ntasks="$PP_NTASK" \
+    --ntasks="$PP_NTASKS" \
     --cpus-per-task="$PP_CPUS_TASK" \
     --mem="$PP_MEM" \
     --mail-type="$PP_MAIL" \
@@ -304,7 +304,7 @@ else
     --job-name="$JOB_NAME" \
     --partition="$PP_NAME" \
     --time="$PP_TIME" \
-    --ntasks="$PP_NTASK" \
+    --ntasks="$PP_NTASKS" \
     --cpus-per-task="$PP_CPUS_TASK" \
     --mem="$PP_MEM" \
     --mail-type="$PP_MAIL" \

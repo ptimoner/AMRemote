@@ -97,7 +97,7 @@ sbatch \
   --job-name="$JOB_NAME" \
   --partition="$PM_NAME" \
   --time="$PM_TIME" \
-  --ntasks="$PM_NTASK" \
+  --ntasks="$PM_NTASKS" \
   --cpus-per-task="$PM_CPUS_TASK" \
   --mem="$PM_MEM" \
   --mail-type="$PM_MAIL" \
@@ -127,7 +127,7 @@ else
   --job-name="$JOB_NAME" \
   --partition="$PM_NAME" \
   --time="$PM_TIME" \
-  --ntasks="$PM_NTASK" \
+  --ntasks="$PM_NTASKS" \
   --cpus-per-task="$PM_CPUS_TASK" \
   --mem="$PM_MEM" \
   --mail-type="$PM_MAIL" \

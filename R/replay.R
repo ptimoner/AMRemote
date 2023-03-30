@@ -32,31 +32,32 @@ split <- as.logical(commandArgs(trailingOnly = TRUE)[7])
 if (hpc) {
   # This parameter is not empty if job array
   taskID <- as.numeric(commandArgs(trailingOnly = TRUE)[30])
-  # Read the table create in array.sh where we have the correspondence between the array indices and a code that contains information about
-  # the region index and/or the travel time.
-  idTable <- read.table(file.path(pathOut, "ids.txt"), header = FALSE, col.names = c("id", "codeId"), colClasses = c("numeric", "character"))
-  codeId <- idTable$codeId[idTable$id == taskID]
-  if (length(codeId) > 0) {
-    # We have an array based on region and travel time (no zonal stat possible)
-    if (nchar(codeId) == 10) {
-      # convert the number to a string and split it into two substrings
-      sub1 <- substr(codeId, 1, 5)
-      sub2 <- substr(codeId, 6, 10)
-      # convert each substring back to an integer and subtract 10000
-      maxTravelTime <- as.integer(sub1) - 10000
-      ind <- as.integer(sub2) - 10000
-    } else {
-      # If less than 10 character either is region ID or travel time ID
-      if (split) {
-        ind <- as.numeric(codeId)
+  if (!is.na(taskID)) {
+    # Read the table create in array.sh where we have the correspondence between the array indices and a code that contains information about
+    # the region index and/or the travel time.
+    idTable <- read.table(file.path(pathOut, "ids.txt"), header = FALSE, col.names = c("id", "codeId"), colClasses = c("numeric", "character"))
+    codeId <- idTable$codeId[idTable$id == taskID]
+    if (length(codeId) > 0) {
+      # We have an array based on region and travel time (no zonal stat possible)
+      if (nchar(codeId) == 10) {
+        # convert the number to a string and split it into two substrings
+        sub1 <- substr(codeId, 1, 5)
+        sub2 <- substr(codeId, 6, 10)
+        # convert each substring back to an integer and subtract 10000
+        maxTravelTime <- as.integer(sub1) - 10000
+        ind <- as.integer(sub2) - 10000
       } else {
-        maxTravelTime <- as.numeric(codeId)
+        # If less than 10 character either is region ID or travel time ID
+        if (split) {
+          ind <- as.numeric(codeId)
+        } else {
+          maxTravelTime <- as.numeric(codeId)
+        }
       }
     }
   }
 }
-
-
+  
 # If Zonal stat we keep set the time for modelling the travel time raster to 0
 # Zonal stat can be true only if analysis is "accessibility"
 # If Zonal stat, no job array; maxTravelTime could not have been replaced

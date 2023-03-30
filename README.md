@@ -54,11 +54,13 @@ Within the AMRemote folder, you will find (among others):
 
 ```txt 
 |-- run.sh             -> to launch the replay analysis
-|-- inputs.json        -> file with editable parameters
+|-- inputs.json        -> file with editable replay anaylsis parameters (all users)
+|-- hpc.json           -> file with editable sbatch parameters like partition name, time limit,
+                          memory, etc. (advanced users)
 ```
-These are the only two files you need to interact with to run the replay function.
+These are the only files you will interact with to run the replay function.
 
-Open the inputs.json and modify the parameters **without changing the format**.
+Open the inputs.json and modify the replay analysis parameters (**do not change the format**).
 
 ```txt 
 $ nano inputs.json
@@ -69,23 +71,24 @@ You will find the following parameters:
 |-- inputFolder                -> path to the folder that contains the project.am5p and config.json files
 
 |-- AccessModImage             -> when using Docker (in a server or locally) 
-the name of the image (e.g. fredmoser/accessmod:5.8.0) or the path to the image 
-(e.g. ~/images/accessmod.sif) when using Singularity (cluster)
+                                  the name of the image (e.g. fredmoser/accessmod:5.8.0) or the path to the image 
+                                  (e.g. ~/images/accessmod.sif) when using Singularity (cluster)
 
 |-- maxTravelTime              -> an array of maximum travel times (e.g. [60,120]); when zonalStat 
-is true, the prior accessibility analysis will be run with no maximum travel time (will be set to 0)
+                                  is true, the prior accessibility analysis will be run with no maximum travel 
+                                  time (will be set to 0)
 
 |-- splitRegion                -> logical parameter (true/false) to indicate if the analysis must 
-be splitted by region (only for coverage analysis)
+                                  be splitted by region (only for coverage analysis)
 
 |-- splitRegionAdminColName    -> when splitRegion is true, the name of the column in the facility 
-shapefile corresponding the name of the regions
+                                  shapefile corresponding the name of the regions
 
 |-- zonalStat                  -> logical parameter (true/false) to indicate if a Zonal Statistics analysis 
-must be run (only for accessibility analysis)
+                                  must be run (only for accessibility analysis)
 
 |-- zonalStatPop               -> when zonalStat is true, the label of the population layer in the 
-AccessMod project
+                                  AccessMod project
 
 |-- zonalStatZones             -> when zonalStat is true, the label of the zone layer in the AccessMod project
 
@@ -94,12 +97,13 @@ AccessMod project
 |-- zonalStatLabelField        -> when zonalStat is true, the label field in the zone layer
 
 |-- nohup                      -> logical parameter (true/false) only considered when running 
-the analysis on a regular server; if true it indicates that the analysis does not stop when the user 
-logs out; still possible to check the progress of the analysis or to kill the process (instructions on 
-how to do it are given when running the analysis).
+                                  the analysis on a regular server; if true it indicates that the analysis does 
+                                  not stop when the user logs out; still possible to check the progress of the 
+                                  analysis or to kill the process (instructions on how to do it are given when running 
+                                  the analysis).
 
 ```
-Just replace the values accordingly. Logical parameters are "splitRegion", "zonalStat" and "nohup"; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (maxTravelTime) must be separated by commas and contained within square brackets. Empty values must always be provided with double quotes: ""
+Just replace the values accordingly. Logical parameters are *splitRegion*, *zonalStat* and *nohup*; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (*maxTravelTime*) must be separated by commas and contained within square brackets. Empty values must always be provided with double quotes: ""
 
 Once you set the parameters, use the following command the run the replay analysis.
 
@@ -108,7 +112,7 @@ $ bash run.sh
 ```
 An output folder will be created within the input folder.
 
-The script will detect if it is running on a cluster or not, and will use Docker or Singularity accordingly. On a cluster you can check the ID and the status of the submitted job using the following command:
+The script will detect if it is running on a cluster or not, and will use Docker or Singularity accordingly. On a cluster you can check the Job ID and the status of the submitted job using the following command:
 
 ```txt 
 $ squeue -u $USER

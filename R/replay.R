@@ -43,14 +43,14 @@ if (hpc) {
       sub1 <- substr(codeId, 1, 5)
       sub2 <- substr(codeId, 6, 10)
       # convert each substring back to an integer and subtract 10000
-      timeThr <- as.integer(sub1) - 10000
+      maxTravelTime <- as.integer(sub1) - 10000
       ind <- as.integer(sub2) - 10000
     } else {
       # If less than 10 character either is region ID or travel time ID
       if (split) {
         ind <- as.numeric(codeId)
       } else {
-        timeThr <- as.numeric(codeId)
+        maxTravelTime <- as.numeric(codeId)
       }
     }
   }

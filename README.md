@@ -1,20 +1,18 @@
 # AMRemote
-Standard scripts to run AccessMod analyses remotely (server or HPC) through the replay function. 
+Standard tool to run AccessMod analyses through the replay function. It can be run on a your local machine, a regular server or a cluster. A Unix-like OS on your machine is required, either to run the replay or to interact with a server/cluster. Docker (server, local machine) or Singularity (cluster) is also required.
 
-Are currently available:
-- Standard replay (any module) with or without different travel times
-- Replay splitting the analysis by region (appropriate for coverage analysis in large countries).
+Replay is available for any kind of analysis. With accessibility analysis we can choose whether we want to run a zonal statistic analysis right after or not. For coverage analysis we can decide to split the analysis by region (recommended for very large countries and when a cluster is available so different jobs can be sent in parallel). Launching a replay considering multiple maximum travel times is also possible.
 
-## Upload files
+## Inputs
 
-You will always need the following files (identical names) within the same input folder located remotely (hpc or server):
+You will always need the following files (identical names) within the same input folder:
 
 ```txt 
 |-- project.amp5       -> AccessMod project
 |-- config.json        -> config file generated in AccessMod corresponding to the desired analysis
 ```
 
-Let's say that you have these files locally in C:/myname/replay and that you want to copy them into your remote home directory. From your local machine:
+Let's say that you have these files locally in C:/myname/replay and that you want to run the analysis remotely. You first have to copy them into your remote directory. From your local machine, for instance:
 
 ```txt 
 $ scp -r C:/myname/replay <username>@<serveraddress>:~/
@@ -22,7 +20,7 @@ $ scp -r C:/myname/replay <username>@<serveraddress>:~/
 
 ## AccessMod image
 
-In the HPC (HPC uses singularity instead of Docker):
+On the cluster (cluster uses Singularity instead of Docker):
 
 ```txt 
 $ ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
@@ -31,80 +29,119 @@ $ singularity pull ~/image/accessmod.sif docker://fredmoser/accessmod:5.8.0
 where the image (fredmoser/accessmod:5.8.0) can be adapted, and the path (~/image/accessmod.sif) is chosen by the user. 
 More details here: https://docs.sylabs.io/guides/3.2/user-guide/cli/singularity_pull.html
 
-In the server:
+On a regular server or on your local machine:
 
 ```txt 
 $ docker pull fredmoser/accessmod:5.8.0
 ```
 where the image (fredmoser/accessmod:5.8.0) can be adapted
 
-## Make scripts available
+## Make AMRemote available
 
-In your remote disk space, clone and pull (if already cloned) this github repository.
+Clone or pull (if already cloned, in order to update it) the AMRemote github repository onto the machine where you'd like to run the analysis.
 
 ```txt 
 $ git clone https://github.com/ptimoner/AMRemote/
 ```
 
-or 
-
 ```txt 
 $ git pull AMRemote
 ```
+
 ## Procedure
 
-In your remote machine, within the AMRemote folder, go to the subfolder that corresponds to your analysis. The only scripts that you will potentially run directly are the following:
+Within the AMRemote folder, you will find (among others):
 
 ```txt 
-|-- script.sh          -> when using a remote server
-|-- main_hpc.sh        -> when using a HPC
+|-- run.sh             -> to launch the replay analysis
+|-- inputs.json        -> file with editable replay anaylsis parameters (all users)
+|-- hpc.json           -> file with editable sbatch parameters like partition name, time limit,
+                          memory, etc. (advanced users)
 ```
-Change permission so you can execute them (only the first time).
+These are the only files you will interact with to run the replay function.
 
-```txt 
-$ chmod +x script.sh
-```
-
-or
-
-```txt 
-$ chmod +x main_hpc.sh
-```
-
-Run the script with its corresponding parameters:
-
-In all cases the first parameter will be the path to the input folder and the second one the AccessMod image name (server) or path (HPC).
-
-In a server, for instance:
-
-```txt 
-$ ./script.sh ~/<inputFolder> fredmoser/accessmod:5.8.0
-```
-In a HPC:
-
-```txt 
-$ ./main_hpc.sh ~/<inputFolder> ~/image/accesmod.sif
-```
-For the 'split by region' coverage analysis, you will have to provide a third parameter corresponding to the name of the column in the health facility attribute table that refers to the region.
-
-For instance, 
-
-```txt 
-$ ./script.sh ~/<inputFolder> fredmoser/accessmod:5.8.0 admin
-```
-
-For analyses using different travel times, open the inputs.json file and modify the travel times accordingly. Within the multiple_travel_times folder:
+Open the inputs.json and modify the replay analysis parameters (**do not change the format**).
 
 ```txt 
 $ nano inputs.json
 ```
-Modify the file, and exit with CTL-X (and Y when asked if you'd like to save changes).
+You will find the following parameters:
+
+```txt 
+|-- inputFolder                -> path to the folder that contains the project.am5p and config.json files
+
+|-- AccessModImage             -> when using Docker (in a server or locally) 
+                                  the name of the image (e.g. fredmoser/accessmod:5.8.0) or the path to the image 
+                                  (e.g. ~/images/accessmod.sif) when using Singularity (cluster)
+
+|-- maxTravelTime              -> an array of maximum travel times (e.g. [60,120]); when zonalStat 
+                                  is true, the prior accessibility analysis will be run with no maximum travel 
+                                  time (will be set to 0)
+
+|-- splitRegion                -> logical parameter (true/false) to indicate if the analysis must 
+                                  be splitted by region (only for coverage analysis)
+
+|-- splitRegionAdminColName    -> when splitRegion is true, the name of the column in the facility 
+                                  shapefile corresponding the name of the regions
+
+|-- zonalStat                  -> logical parameter (true/false) to indicate if a Zonal Statistics analysis 
+                                  must be run (only for accessibility analysis)
+
+|-- zonalStatPop               -> when zonalStat is true, the label of the population layer in the 
+                                  AccessMod project
+
+|-- zonalStatZones             -> when zonalStat is true, the label of the zone layer in the AccessMod project
+
+|-- zonalStatIDField           -> when zonalStat is true, the ID field (integer) in the zone layer
+
+|-- zonalStatLabelField        -> when zonalStat is true, the label field in the zone layer
+
+|-- nohup                      -> logical parameter (true/false) only considered when running 
+                                  the analysis on a regular server; if true it indicates that the analysis does 
+                                  not stop when the user logs out; still possible to check the progress of the 
+                                  analysis or to kill the process (instructions on how to do it are given when running 
+                                  the analysis).
+
+```
+Just replace the values accordingly. Logical parameters are *splitRegion*, *zonalStat* and *nohup*; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (*maxTravelTime*) must be separated by commas and contained within square brackets. Empty values must always be provided with double quotes ("") except for the *maxTravelTime*, where empty square brackets is required ([]).
+
+Recall that white spaces in layer labels in AccessMod are actually replaced by "_" (for *zonalStatPop* and *zonalStatZones* parameters)
+
+Once you set the parameters, use the following command the run the replay analysis.
+
+```txt 
+$ bash run.sh
+```
+or if you are not within the AMRemote folder:
+ 
+```txt 
+$ bash <pathToAMRemote>/run.sh
+```
+
+An output folder will be created within the input folder.
+
+The script will detect if it is running on a cluster or not, and will use Docker or Singularity accordingly. On a cluster you can check the Job ID and the status of the submitted job using the following command:
+
+```txt 
+$ squeue -u $USER
+```
+
+If the job has started you can check the progress of the analysis by reading the ".out" file corresponding to the job which is dynamically saved in the subfolder 'slum_reports' created within the output folder.
+
+```txt 
+$ cat <slum_report_folder>/<outfile>
+```
+
+You can cancel the job whenever is required using the command:
+
+```txt 
+$ scancel <jobid>
+```
+On a regular server, when the parameter 'nohup' is set true, the user can still check the progress of the analysis or kill the process (instructions on how to do it are given when the user executes the run.sh script).
 
 ## Outputs
 
-Will be created an output folder called 'out' within your input folder with all the results.
-
-To download your results, from your local machine:
+If the analysis has been run remotely, download your results with the scp command. For instance:
 
 ```txt 
 $ scp -r <username>@<serveraddress>:~/<inputFolder>/out C:/myname/replay 

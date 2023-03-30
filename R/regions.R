@@ -2,6 +2,7 @@
 
 # Load accessmod environment -----------------
 source("global.R")
+source("/batch/functions.R")
 options(warn=-1)
 
 # Get column name for regions
@@ -22,23 +23,13 @@ conf <- amAnalysisReplayParseConf(pathConfig)
 # Connection with GRASS database -----------------
 # Import project
 print("Importing the project...")
-amAnalisisReplayImportProject(
-  archive = pathProject,
-  name = conf$location,
-  overwrite = TRUE
-)
-print("Project imported...")
+importProject(pathProject, conf)
 
 # Load the health facility attribute table
 amGrassNS(
   location = conf$location,
   mapset = conf$mapset,
   {
-    # db <- execGRASS("v.db.select", parameters=list(map=conf$args$inputHf), intern=TRUE)
-    # con <- textConnection(db)
-    # # Read.table may produce issues (more columns than column names)
-    # df <- read.csv(con, header=TRUE, sep="|")
-    # close(con)
     vect <- readVECT(conf$args$inputHf)
     df <- vect@data
     hfCat <- df[, "cat"]
@@ -52,8 +43,6 @@ amGrassNS(
 toPrint <- hfDf[!duplicated(paste0(hfDf$region, "_", hfDf$index)), c(2, 3)]
 toPrint <- toPrint[order(toPrint$index), ]
 print(toPrint)
-# write.csv(toPrint, file = paste0(pathOut, "/hf_regions.csv"), row.names = FALSE)
-# Save JSON for the analysis
 json <- toJSON(list(hfDf = hfDf, index = index), auto_unbox = TRUE)
-write(json, file = paste0(pathOut, "/inputs.json"))
+write(json, file = paste0(pathOut, "/regions.json"))
 

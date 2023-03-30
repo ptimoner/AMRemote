@@ -223,7 +223,7 @@ cp "$RUN_DIR/inputs.json" "$OUTPUT_DIR/inputs.json"
 # subsequent scripts. See code_param.csv
 PARAM=()
 # Append empty elements to the array until it has a size of 30
-while [[ ${#PARAM[@]} -lt 40 ]]
+while [[ ${#PARAM[@]} -lt 30 ]]
 do
   PARAM+=('')
 done

@@ -71,9 +71,9 @@ else
 # To maintain same number of parameters that are passed through the different scripts
   # REGION_JSON_FILE=""
   # PARAM+=("$REGION_JSON_FILE")
-  if [[ MULTI_TRAVEL_TIMES == "true" ]]
+  if [[ $MULTI_TRAVEL_TIMES == "true" ]]
   then
-    if [[ ZONAL_STAT == "false" ]]
+    if [[ $ZONAL_STAT == "false" ]]
     then
     # ID will be travel times
       CODE_ID="${MAX_TRAVEL_TIME// /,}"
@@ -126,7 +126,7 @@ else
   sbatch \
   --dependency=afterok:${JOB_ARRAY_ID} \
   --array="$INDICES" \
-  --output="$OUTPUT_DIR/slum_reports/replay_%a_%A.out" \
+  --output="$OUTPUT_DIR/slum_reports/replay_%A_%a.out" \
   --job-name="$JOB_NAME" \
   --partition="$PM_NAME" \
   --time="$PM_TIME" \

@@ -82,7 +82,6 @@ if command -v sinfo >/dev/null 2>&1
   #   echo "Maximum time allowed in $PM_NAME (main analysis) is $ALLOWED_TIME; please check the hpc.json file"
   #   exit 2
   # fi
-fi
 else
   HPC=false
 fi

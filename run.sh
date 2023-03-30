@@ -273,6 +273,11 @@ else
   PARAM[24]="$PM_MEM"
   PARAM[25]="$PM_MAIL"
   
+  for i in "${PARAM[@]}"
+  do
+    echo "$i"
+  done
+  exit
   # Make directory for slurm reports
   mkdir -p "$OUTPUT_DIR/slum_reports"
   # Make random jobname (so we avoid conflict when accessing job id using the name, when we run multiple analysis at the same time)

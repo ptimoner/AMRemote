@@ -70,7 +70,7 @@ if command -v sinfo >/dev/null 2>&1
   PM_NTASKS=$(jq -r '.Main.ntasks' "$RUN_DIR/hpc.json")
   PM_CPUS_TASK=$(jq -r '.Main.cpus_per_task' "$RUN_DIR/hpc.json")
   PM_MEM=$(jq -r '.Main.mem' "$RUN_DIR/hpc.json")
-  PM_MAIL=$(jq -r '.Main.mail_type' "$RUN_DIR/hpc.json"
+  PM_MAIL=$(jq -r '.Main.mail_type' "$RUN_DIR/hpc.json")
   # Get the maximum time allowed for the partition from Slurm
   ALLOWED_TIME=$(scontrol show partition "${PM_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
   # Convert the times to seconds for comparison

@@ -36,7 +36,7 @@ if (hpc) {
   # the region index and/or the travel time.
   idTable <- read.table(file.path(pathOut, "ids.txt"), header = FALSE, col.names = c("id", "codeId"), colClasses = c("numeric", "character"))
   codeId <- idTable$codeId[idTable$id == taskID]
-  if (nchar(codeId) > 0) {
+  if (length(codeId) > 0) {
     # We have an array based on region and travel time (no zonal stat possible)
     if (nchar(codeId) == 10) {
       # convert the number to a string and split it into two substrings

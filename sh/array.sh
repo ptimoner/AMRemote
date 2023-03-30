@@ -23,6 +23,8 @@ else
     MULTI_TRAVEL_TIMES=false
 fi
 
+echo $MULTI_TRAVEL_TIMES
+
 # Do we need an array (multiple travel times, split by region, both) ?
 # Check if split by region
 if [ $SPLIT == "true" ]
@@ -38,6 +40,7 @@ then
   PARAM[28]="$REGION_JSON_FILE"
   if [[ $MULTI_TRAVEL_TIMES == "true" ]]
   then
+    echo "split and multi"
     # We want to be able to separate then the time and the region index
     # Must be numerical for sbatch array
     # Split the input variables into arrays
@@ -61,10 +64,12 @@ then
     # Remove the trailing comma from the output string
     CODE_ID=${CODE_ID::-1}
   else
-  # If only split
-  CODE_ID=$REGIONS
+    echo "only split"
+    # If only split
+    CODE_ID=$REGIONS
   fi
 else
+  echo "no split"
 # If no split by region
 # To maintain same number of parameters that are passed through the different scripts
   # REGION_JSON_FILE=""
@@ -83,6 +88,8 @@ else
   fi
 fi
 
+echo "$CODE_ID"
+exit
 # Get the ID of this second job to be sure to run the last sbatch after this one is finished
 JOB_ARRAY_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 

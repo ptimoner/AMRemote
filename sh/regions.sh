@@ -54,7 +54,7 @@ singularity run \
 JOB_REGIONS_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 
 # jobID parameter
-PARAM[27]=("$JOB_REGIONS_ID")
+PARAM[27]="$JOB_REGIONS_ID"
 
 # Make random jobname (so we avoid conflict when accessing job id using the name, when we run multiple analysis at the same time)
 JOB_NAME="2_$(tr -dc 'a-zA-Z' < /dev/urandom | head -c 5)"

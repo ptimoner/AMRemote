@@ -1,13 +1,5 @@
 #!/bin/bash
 
-#SBATCH --time=4-00:00:00
-#SBATCH --partition=public-cpu
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=10000
-#SBATCH --mail-type=ALL
-
-
 # Load modules
 ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
 

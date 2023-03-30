@@ -298,7 +298,7 @@ else
     # JOB_REGIONS_ID=""
     # PARAM+=("$JOB_REGIONS_ID")
     # Run array.sh to check prepare the inputs and run singularity
-    sbatch --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" --partition="$PP_NAME" --time="$PP_TIME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
+    # sbatch --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" --partition="$PP_NAME" --time="$PP_TIME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
     sbatch \
     --output="$OUTPUT_DIR/slum_reports/array.out" \
     --job-name="$JOB_NAME" \

@@ -53,17 +53,17 @@ if command -v sinfo >/dev/null 2>&1
   PP_CPUS_TASK=$(jq -r '.Preliminary.cpus_per_task' "$RUN_DIR/hpc.json")
   PP_MEM=$(jq -r '.Preliminary.mem' "$RUN_DIR/hpc.json")
   PP_MAIL=$(jq -r '.Preliminary.mail_type' "$RUN_DIR/hpc.json")
-  # Get the maximum time allowed for the partition from Slurm
-  ALLOWED_TIME=$(scontrol show partition "${PP_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
-  # Convert the times to seconds for comparison
-  TIME_SEC=$(date -u -d "${PP_TIME}" +"%s")
-  ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
-  # Check if the partition time is less than or equal to the maximum time allowed
-  if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
-  then
-    echo "Maximum time allowed in $PREL_MAIN_NAME (preliminary process) is $ALLOWED_TIME; please check the hpc.json file"
-    exit 2
-  fi
+  # # Get the maximum time allowed for the partition from Slurm
+  # ALLOWED_TIME=$(scontrol show partition "${PP_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
+  # # Convert the times to seconds for comparison
+  # TIME_SEC=$(date -u -d "${PP_TIME}" +"%s")
+  # ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
+  # # Check if the partition time is less than or equal to the maximum time allowed
+  # if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
+  # then
+  #   echo "Maximum time allowed in $PREL_MAIN_NAME (preliminary process) is $ALLOWED_TIME; please check the hpc.json file"
+  #   exit 2
+  # fi
   # Get parameters for main analysis
   PM_NAME=$(jq -r '.Main.name' "$RUN_DIR/hpc.json")
   PM_TIME=$(jq -r '.Main.time' "$RUN_DIR/hpc.json")
@@ -71,17 +71,17 @@ if command -v sinfo >/dev/null 2>&1
   PM_CPUS_TASK=$(jq -r '.Main.cpus_per_task' "$RUN_DIR/hpc.json")
   PM_MEM=$(jq -r '.Main.mem' "$RUN_DIR/hpc.json")
   PM_MAIL=$(jq -r '.Main.mail_type' "$RUN_DIR/hpc.json")
-  # Get the maximum time allowed for the partition from Slurm
-  ALLOWED_TIME=$(scontrol show partition "${PM_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
-  # Convert the times to seconds for comparison
-  TIME_SEC=$(date -u -d "${PM_TIME}" +"%s")
-  ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
-  # Check if the partition time is less than or equal to the maximum time allowed
-  if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
-  then
-    echo "Maximum time allowed in $PM_NAME (main analysis) is $ALLOWED_TIME; please check the hpc.json file"
-    exit 2
-  fi
+  # # Get the maximum time allowed for the partition from Slurm
+  # ALLOWED_TIME=$(scontrol show partition "${PM_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
+  # # Convert the times to seconds for comparison
+  # TIME_SEC=$(date -u -d "${PM_TIME}" +"%s")
+  # ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
+  # # Check if the partition time is less than or equal to the maximum time allowed
+  # if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
+  # then
+  #   echo "Maximum time allowed in $PM_NAME (main analysis) is $ALLOWED_TIME; please check the hpc.json file"
+  #   exit 2
+  # fi
 fi
 else
   HPC=false

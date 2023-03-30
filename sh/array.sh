@@ -16,7 +16,8 @@ PM_MEM=${PARAM[24]}
 PM_MAIL=${PARAM[25]}
 
 # Do we have multiple travel times (in specific cases we would run a job array)
-if [ ${#MAX_TRAVEL_TIME[@]} -gt 1 ]
+TIME_ARRAY=($MAX_TRAVEL_TIME)
+if [ ${#TIME_ARRAY[@]} -gt 1 ]
 then
     MULTI_TRAVEL_TIMES=true
 else
@@ -44,7 +45,7 @@ then
     # We want to be able to separate then the time and the region index
     # Must be numerical for sbatch array
     # Split the input variables into arrays
-    TIME_ARRAY=($MAX_TRAVEL_TIME)
+    # TIME_ARRAY=($MAX_TRAVEL_TIME)
     REGION_ARRAY=(${REGIONS//,/ })
     # Initialize the output variable
     CODE_ID=""

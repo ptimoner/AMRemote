@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#SBATCH --ntasks=1
 # Load modules
 ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
 

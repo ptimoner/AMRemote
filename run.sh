@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Check if jq is installed (required to read the json files)
+if ! command -v jq >/dev/null 2>&1
+then
+  echo "jq is not installed. Please ask your system administrator to install it and try again."
+  exit 2
+fi
+
 # Define the function to check if a variable is a boolean ()
 # If empty set to false
 function is_boolean {
@@ -53,17 +60,6 @@ if command -v sinfo >/dev/null 2>&1
   PP_CPUS_TASK=$(jq -r '.Preliminary.cpus_per_task' "$RUN_DIR/hpc.json")
   PP_MEM=$(jq -r '.Preliminary.mem' "$RUN_DIR/hpc.json")
   PP_MAIL=$(jq -r '.Preliminary.mail_type' "$RUN_DIR/hpc.json")
-  # # Get the maximum time allowed for the partition from Slurm
-  # ALLOWED_TIME=$(scontrol show partition "${PP_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
-  # # Convert the times to seconds for comparison
-  # TIME_SEC=$(date -u -d "${PP_TIME}" +"%s")
-  # ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
-  # # Check if the partition time is less than or equal to the maximum time allowed
-  # if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
-  # then
-  #   echo "Maximum time allowed in $PREL_MAIN_NAME (preliminary process) is $ALLOWED_TIME; please check the hpc.json file"
-  #   exit 2
-  # fi
   # Get parameters for main analysis
   PM_NAME=$(jq -r '.Main.name' "$RUN_DIR/hpc.json")
   PM_TIME=$(jq -r '.Main.time' "$RUN_DIR/hpc.json")
@@ -71,17 +67,6 @@ if command -v sinfo >/dev/null 2>&1
   PM_CPUS_TASK=$(jq -r '.Main.cpus_per_task' "$RUN_DIR/hpc.json")
   PM_MEM=$(jq -r '.Main.mem' "$RUN_DIR/hpc.json")
   PM_MAIL=$(jq -r '.Main.mail_type' "$RUN_DIR/hpc.json")
-  # # Get the maximum time allowed for the partition from Slurm
-  # ALLOWED_TIME=$(scontrol show partition "${PM_NAME}" | grep MaxTime | grep -oP 'MaxTime=\K[\d:]+')
-  # # Convert the times to seconds for comparison
-  # TIME_SEC=$(date -u -d "${PM_TIME}" +"%s")
-  # ALLOWED_TIME_SEC=$(date -u -d "${ALLOWED_TIME}" +"%s")
-  # # Check if the partition time is less than or equal to the maximum time allowed
-  # if [[ "${TIME_SEC}" -le "${ALLOWED_TIME_SEC}" ]]
-  # then
-  #   echo "Maximum time allowed in $PM_NAME (main analysis) is $ALLOWED_TIME; please check the hpc.json file"
-  #   exit 2
-  # fi
 else
   HPC=false
 fi
@@ -244,9 +229,6 @@ PARAM[11]="$ZONE_ID_FIELD"
 PARAM[12]="$ZONE_LABEL_FIELD"
 PARAM[13]="$NOHUP"
 
-# Parameters to be passed
-# PARAM=("$HPC" "$INPUT_DIR" "$IMAGE" "$RUN_DIR" $OUTPUT_DIR "$MAX_TRAVEL_TIME" "$SPLIT" "$ADMIN_COL" "$ZONAL_STAT" "$INPUT_POP" "$INPUT_ZONE" "$ZONE_ID_FIELD" "$ZONE_LABEL_FIELD" "$NOHUP")
-
 # If regular server: replayDocker.sh
 if [[ "$HPC" == "false" ]]
 then
@@ -291,14 +273,7 @@ else
     --mem="$PP_MEM" \
     --mail-type="$PP_MAIL" \
     "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
-    # sbatch --output "$OUTPUT_DIR/slum_reports/regions.out" --job-name="$JOB_NAME" --partition="$PP_NAME" --time="$PP_TIME" "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
   else
-    # # To maintain same number of parameters that are passed through the different scripts
-    # # JOB_ID 
-    # JOB_REGIONS_ID=""
-    # PARAM+=("$JOB_REGIONS_ID")
-    # Run array.sh to check prepare the inputs and run singularity
-    # sbatch --output "$OUTPUT_DIR/slum_reports/array.out" --job-name="$JOB_NAME" --partition="$PP_NAME" --time="$PP_TIME" "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
     sbatch \
     --output="$OUTPUT_DIR/slum_reports/array.out" \
     --job-name="$JOB_NAME" \

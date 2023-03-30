@@ -42,7 +42,7 @@ then
     # We want to be able to separate then the time and the region index
     # Must be numerical for sbatch array
     # Split the input variables into arrays
-    # TIME_ARRAY=($MAX_TRAVEL_TIME)
+    # $TIME_ARRAY is already an array
     REGION_ARRAY=(${REGIONS//,/ })
     # Initialize the output variable
     CODE_ID=""
@@ -68,9 +68,6 @@ then
   fi
 else
 # If no split by region
-# To maintain same number of parameters that are passed through the different scripts
-  # REGION_JSON_FILE=""
-  # PARAM+=("$REGION_JSON_FILE")
   if [[ $MULTI_TRAVEL_TIMES == "true" ]]
   then
     if [[ $ZONAL_STAT == "false" ]]

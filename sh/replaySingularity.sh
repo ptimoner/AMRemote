@@ -20,24 +20,9 @@ then
   JOB_ID=$SLURM_ARRAY_TASK_ID
   # Get the ID so in the R script we can know either the region index or the travel time
   PARAM[29]="$JOB_ID"
-  # New directories for binding data folder (bypass denied access for writing) and out directory
-  # We need a database per job to avoid conflict (in the end of this script we remove these folders)
-  # mkdir -p "$TEMP_DIR/AMdata/temp/$JOB_ID/dbgrass"
-  # mkdir -p "$TEMP_DIR/dbgrass"
-  # mkdir -p "$TEMP_DIR/cache"
-  # mkdir -p "$TEMP_DIR/logs"
-  # # Directory to be binded
-  # DATA_DIR="$TEMP_DIR"
 fi
-  # mkdir -p "$INPUT_DIR/AMdata/dbgrass"
-  # mkdir -p "$INPUT_DIR/AMdata/cache"
-  # mkdir -p "$INPUT_DIR/AMdata/logs"
-  # DATA_DIR="$INPUT_DIR/AMdata"
-  # JOB_ID=""
-  # So we we have the same number of parameters that are passed to the R script
-  # PARAM+=("$JOB_ID")
-# fi
 
+# Make temporary directory for GRASS database
 mkdir -p "$TEMP_DIR/dbgrass"
 mkdir -p "$TEMP_DIR/cache"
 mkdir -p "$TEMP_DIR/logs"
@@ -80,9 +65,3 @@ else
   $IMAGE \
   Rscript /batch/replay.R "${PARAM[@]}"
 fi
-
-# # Remove duplicated data (dbgrass, logs, cache)
-# if [[ -n $SLURM_ARRAY_TASK_ID ]]
-# then
-#   rm -r "$INPUT_DIR/AMdata/temp/"
-# fi

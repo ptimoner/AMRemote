@@ -85,7 +85,8 @@ for (tt in timeThr) {
       hfDf <- regions$hfDf
       byRegion(hfDf, ind, conf, pathOut, tt)
     } else {
-      # If split region
+      # If regular server
+      colName <- commandArgs(trailingOnly = TRUE)[8]
       amGrassNS(
         location = conf$location,
         mapset = conf$mapset,

@@ -103,13 +103,21 @@ You will find the following parameters:
                                   the analysis).
 
 ```
-Just replace the values accordingly. Logical parameters are *splitRegion*, *zonalStat* and *nohup*; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (*maxTravelTime*) must be separated by commas and contained within square brackets. Empty values must always be provided with double quotes: ""
+Just replace the values accordingly. Logical parameters are *splitRegion*, *zonalStat* and *nohup*; they all require true/false values. If empty they are considered as 'false'. For string parameters, use double quotes. Numbers in numerical array (*maxTravelTime*) must be separated by commas and contained within square brackets. Empty values must always be provided with double quotes ("") except for the *maxTravelTime*, where empty square brackets is required ([]).
+
+Recall that white spaces in layer labels in AccessMod are actually replaced by "_" (for *zonalStatPop* and *zonalStatZones* parameters)
 
 Once you set the parameters, use the following command the run the replay analysis.
 
 ```txt 
 $ bash run.sh
 ```
+or if you are not within the AMRemote folder:
+ 
+```txt 
+$ bash <pathToAMRemote>/run.sh
+```
+
 An output folder will be created within the input folder.
 
 The script will detect if it is running on a cluster or not, and will use Docker or Singularity accordingly. On a cluster you can check the Job ID and the status of the submitted job using the following command:

@@ -1,9 +1,9 @@
 {
-    "inputFolder": "~/demo/coverage",
-    "AccessModImage": "~/accessmod.sif",
+    "inputFolder": "demo/coverage",
+    "AccessModImage": "fredmoser/accessmod:5.8.0",
     "maxTravelTime": [60],
-    "splitRegion": true,
-    "splitRegionAdminColName": "admin_name",
+    "splitRegion": false,
+    "splitRegionAdminColName": "",
     "zonalStat": false,
     "zonalStatPop": "",
     "zonalStatZones": "",

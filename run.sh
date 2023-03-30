@@ -43,7 +43,7 @@ ZONAL_STAT=$(is_boolean zonalStat)
 
 # Is slurm management available (cluster)
 if command -v sinfo >/dev/null 2>&1
-  then
+then
   echo "Slurm Workload Manager is installed"
   if [[ $NOHUP == "true"  ]]
   then
@@ -111,6 +111,15 @@ INPUT_DIR=$(realpath $INPUT_DIR)
 
 # Max travel times (can be one or multiple)
 MAX_TRAVEL_TIME=$(jq -r '.maxTravelTime | join(" ")' "$RUN_DIR/inputs.json")
+
+if [[ -z $MAX_TRAVEL_TIME ]]
+then
+  echo "Empty maxTravelTime; value will be retrieved from the config file"
+  MAX_TRAVEL_TIME=$(jq -r '.args.maxTravelTime' "$INPUT_DIR/config.json")
+else
+  echo "Provided maxTravelTime(s) will replace the one from the config file"
+fi
+
 # Check if integers
 # Split the string into an array
 MAX_TRAVEL_TIME_ARRAY=($MAX_TRAVEL_TIME)

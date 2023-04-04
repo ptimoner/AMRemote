@@ -50,7 +50,6 @@ singularity run \
   Rscript /batch/regions.R "$ADMIN_COL"
 
 # Get the ID of this first job
-
 JOB_REGIONS_ID=$(squeue -h -u $USER -o %i -n $JOB_NAME)
 
 # jobID parameter

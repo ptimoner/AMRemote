@@ -34,7 +34,7 @@ then
   # Path to the created regions.json file (with get_regions.R)
   REGION_JSON_FILE="$OUTPUT_DIR/regions.json"
   # Get region indices
-  REGIONS=$(cat "$REGION_JSON_FILE" | jq -r '.index | join(",")')
+  REGIONS=$(jq -r '.index | join(",")' "$REGION_JSON_FILE")
   # Pass all parameters + JSON file path (required in R script)
   PARAM[28]="$REGION_JSON_FILE"
   if [[ $MULTI_TRAVEL_TIMES == "true" ]]

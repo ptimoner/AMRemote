@@ -36,8 +36,8 @@ if [ $? -ne 0 ]; then
   exit 2
 fi
 
+
 # Get boolean values from inputs.json file
-NOHUP=$(is_boolean nohup)
 SPLIT=$(is_boolean splitRegion)
 ZONAL_STAT=$(is_boolean zonalStat)
 
@@ -45,11 +45,13 @@ ZONAL_STAT=$(is_boolean zonalStat)
 if command -v sinfo >/dev/null 2>&1
 then
   echo "Slurm Workload Manager is installed"
-  if [[ $NOHUP == "true"  ]]
-  then
-    echo "'nohup' argument will be ignored"
-  fi
   HPC=true
+  # Check if hpc.json is ok (when modifying manually, errors can occur)
+  jq "empty" $(realpath "$RUN_DIR/hpc.json")
+  if [ $? -ne 0 ]; then
+    echo "An error occurred. Check the hpc.json file. Exiting..."
+    exit 2
+  fi
   # Parameters for submitting the jobs will be retrieve; the max time will checked
   # But others not. The user is responsible to check carefully that they inputs in
   # the hpc.json file are correct.
@@ -68,6 +70,7 @@ then
   PM_MEM=$(jq -r '.Main.mem' "$RUN_DIR/hpc.json")
   PM_MAIL=$(jq -r '.Main.mail_type' "$RUN_DIR/hpc.json")
 else
+  NOHUP=$(is_boolean nohup)
   HPC=false
 fi
 
@@ -93,6 +96,10 @@ fi
 
 # Get input folder path from inputs.json file (eval is required for ~)
 INPUT_DIR=$(eval echo $(jq -r '.inputFolder' "$RUN_DIR/inputs.json"))
+
+# Get the absolute path
+INPUT_DIR=$(realpath $INPUT_DIR)
+
 # Check if inputs exists
 if [[ ! -e "$INPUT_DIR/project.am5p" ]]
 then 
@@ -105,9 +112,6 @@ then
   echo "Missing file: $INPUT_DIR/config.json"
   exit 2
 fi
-
-# Get the absolute path
-INPUT_DIR=$(realpath $INPUT_DIR)
 
 # Max travel times (can be one or multiple)
 MAX_TRAVEL_TIME=$(jq -r '.maxTravelTime | join(" ")' "$RUN_DIR/inputs.json")
@@ -236,13 +240,14 @@ PARAM[9]="$INPUT_POP"
 PARAM[10]="$INPUT_ZONE"
 PARAM[11]="$ZONE_ID_FIELD"
 PARAM[12]="$ZONE_LABEL_FIELD"
-PARAM[13]="$NOHUP"
 
 # If regular server: replayDocker.sh
 if [[ "$HPC" == "false" ]]
 then
+  PARAM[13]="$NOHUP"
   bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
 else
+  PARAM[13]=""
   # Preliminaray jobs
   PARAM[14]="$PP_NAME"
   PARAM[15]="$PP_TIME"

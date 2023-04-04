@@ -46,6 +46,7 @@ if command -v sinfo >/dev/null 2>&1
 then
   echo "Slurm Workload Manager is installed"
   HPC=true
+  NOHUP=""
   # Check if hpc.json is ok (when modifying manually, errors can occur)
   jq "empty" $(realpath "$RUN_DIR/hpc.json")
   if [ $? -ne 0 ]; then
@@ -240,14 +241,13 @@ PARAM[9]="$INPUT_POP"
 PARAM[10]="$INPUT_ZONE"
 PARAM[11]="$ZONE_ID_FIELD"
 PARAM[12]="$ZONE_LABEL_FIELD"
+PARAM[13]="$NOHUP"
 
 # If regular server: replayDocker.sh
 if [[ "$HPC" == "false" ]]
 then
-  PARAM[13]="$NOHUP"
   bash "$RUN_DIR/sh/replayDocker.sh" "${PARAM[@]}"
 else
-  PARAM[13]=""
   # Preliminaray jobs
   PARAM[14]="$PP_NAME"
   PARAM[15]="$PP_TIME"

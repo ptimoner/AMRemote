@@ -23,6 +23,9 @@ REPLAY_SCRIPT_FILE="$RUN_DIR/R/replay.R"
 FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 CONFIG_FILE="$INPUT_DIR/config.json"
 
+# Temporary (to solve issue for referral (tableFacilitiesTo)
+VALIDATION_DICT="$RUN_DIR/amAnalysisReplayValidationDict.json"
+
 # Run docker with mounted inputs and launch the R script
 # --rm clean up the container
 # --user so the docker container is run as a non-root user (to keep the rights on the outputs)
@@ -40,6 +43,7 @@ then
     -v $CONFIG_FILE:/batch/config.json \
     -v $REPLAY_SCRIPT_FILE:/batch/replay.R \
     -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
+    -v $VALIDATION_DICT:/batch/amAnalysisReplayValidationDict.json \
     $IMAGE \
     nohup Rscript /batch/replay.R "${PARAM[@]}" > "$OUTPUT_DIR/nohup.out" 2>&1 & sleep 1s && echo ""
   echo "To monitor the progress of your analysis, type: cat $OUTPUT_DIR/nohup.out"
@@ -55,6 +59,7 @@ else
     -v $CONFIG_FILE:/batch/config.json \
     -v $REPLAY_SCRIPT_FILE:/batch/replay.R \
     -v $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
+    -v $VALIDATION_DICT:/batch/amAnalysisReplayValidationDict.json \
     $IMAGE \
     Rscript /batch/replay.R "${PARAM[@]}"
 fi

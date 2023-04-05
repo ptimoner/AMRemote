@@ -35,6 +35,9 @@ R_SCRIPT_FILE="$RUN_DIR/R/replay.R"
 CONFIG_FILE="$INPUT_DIR/config.json"
 FUNCTIONS_SCRIPT_FILE="$RUN_DIR/R/functions.R"
 
+# Temporary (to solve issue for referral (tableFacilitiesTo)
+VALIDATION_DICT="$RUN_DIR/amAnalysisReplayValidationDict.json"
+
 # If split we need to bind the regions.json file as well
 if [[ $SPLIT == "true" ]]
 then
@@ -49,6 +52,7 @@ then
     -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     -B $R_SCRIPT_FILE:/batch/replay.R \
     -B $DATA_DIR:/data \
+    -B $VALIDATION_DICT:/batch/amAnalysisReplayValidationDict.json \
     --pwd /app \
     $IMAGE \
     Rscript /batch/replay.R "${PARAM[@]}"
@@ -61,6 +65,7 @@ else
   -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   -B $R_SCRIPT_FILE:/batch/replay.R \
   -B $DATA_DIR:/data \
+  -B $VALIDATION_DICT:/batch/amAnalysisReplayValidationDict.json \
   --pwd /app \
   $IMAGE \
   Rscript /batch/replay.R "${PARAM[@]}"

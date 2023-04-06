@@ -5,12 +5,6 @@ source("global.R")
 source("/batch/functions.R")
 options(warn=-1)
 
-# To bypass the ReplayValidation issue (missing )
-config$dictReplayValidation <- fromJSON(
-  "/batch/amAnalysisReplayValidationDict.json",
-  simplifyDataFrame = F
-)
-
 # Define paths and config
 pathConfig <- "/batch/config.json"
 pathProject <- "/batch/project.am5p"

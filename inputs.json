@@ -1,6 +1,6 @@
 {
-    "inputFolder": "demo/coverage",
-    "AccessModImage": "fredmoser/accessmod:5.8.0",
+    "inputFolder": "demo/accessibility",
+    "AccessModImage": "~/accessmod.sif",
     "maxTravelTime": [60],
     "splitRegion": false,
     "splitRegionAdminColName": "",

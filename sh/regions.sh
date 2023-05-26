@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load modules
-ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
+# ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
 
 # Passed parameters
 PARAM=("${@}")

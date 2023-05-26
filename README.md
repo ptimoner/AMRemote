@@ -23,7 +23,6 @@ $ scp -r C:/myname/replay <username>@<serveraddress>:~/
 On the cluster (cluster uses Singularity instead of Docker):
 
 ```txt 
-$ ml GCC/9.3.0 Singularity/3.7.3-Go-1.14
 $ singularity pull ~/image/accessmod.sif docker://fredmoser/accessmod:5.8.0
 ```
 where the image (fredmoser/accessmod:5.8.0) can be adapted, and the path (~/image/accessmod.sif) is chosen by the user. 

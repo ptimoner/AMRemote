@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Check if jq is installed (required to read the json files)
+if ! command -v jq >/dev/null 2>&1
+then
+  echo "jq is not found. Load the required modules at the beginning of array.sh, or if not available, ask your system administrator to install it and try again."
+  exit 2
+fi
+
+# 
+
 # Passed parameters
 PARAM=("${@}")
 RUN_DIR=${PARAM[3]}
@@ -99,7 +108,7 @@ sbatch \
   --time="$PM_TIME" \
   --ntasks="$PM_NTASKS" \
   --cpus-per-task="$PM_CPUS_TASK" \
-  --mem="$PM_MEM" \
+  --mem-per-cpu="$PM_MEM" \
   --mail-type="$PM_MAIL" \
   "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 else
@@ -129,7 +138,7 @@ else
   --time="$PM_TIME" \
   --ntasks="$PM_NTASKS" \
   --cpus-per-task="$PM_CPUS_TASK" \
-  --mem="$PM_MEM" \
+  --mem-per-cpu="$PM_MEM" \
   --mail-type="$PM_MAIL" \
   "$RUN_DIR/sh/replaySingularity.sh" "${PARAM[@]}"
 fi

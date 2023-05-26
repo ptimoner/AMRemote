@@ -34,6 +34,7 @@ amGrassNS(
     df <- vect@data
     hfCat <- df[, "cat"]
     hfRegion <- df[, colName]
+    ## AS CHARACTER !!!! ISSUE WIHT NICOLA WHEN THEN CONCATEN
     hfIndex <- as.numeric(as.factor(hfRegion))
     hfDf <- data.frame(cat = hfCat, region = hfRegion, index = hfIndex)
     index <- unique(hfIndex)

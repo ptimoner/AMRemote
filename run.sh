@@ -1,9 +1,27 @@
 #!/bin/bash
 
+
+# Check required modules (depends on the cluster; see hpc.json)
+# Function to check if a module exists
+function check_module_exists {
+  local module_name="$1"
+  
+  if [[ $(module avail "$1" &> /dev/null) ]]
+  then
+    echo "Loading module $1"
+    ml $1
+  else
+    echo "Module $1 is not available. Exiting..."
+    exit 2
+  fi
+}
+
+
+
 # Check if jq is installed (required to read the json files)
 if ! command -v jq >/dev/null 2>&1
 then
-  echo "jq is not installed. Please ask your system administrator to install it and try again."
+  echo "jq is not found. Load the required modules at the beginning of array.sh, or if not available, ask your system administrator to install it and try again."
   exit 2
 fi
 
@@ -31,7 +49,8 @@ function is_boolean {
 RUN_DIR=$(realpath $(dirname $0))
 # Check if input.json is ok (when modifying manually, errors can occur)
 jq "empty" $(realpath "$RUN_DIR/inputs.json")
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]
+then
   echo "An error occurred. Check the inputs.json file. Exiting..."
   exit 2
 fi
@@ -61,14 +80,14 @@ then
   PP_TIME=$(jq -r '.Preliminary.time' "$RUN_DIR/hpc.json")
   PP_NTASKS=$(jq -r '.Preliminary.ntasks' "$RUN_DIR/hpc.json")
   PP_CPUS_TASK=$(jq -r '.Preliminary.cpus_per_task' "$RUN_DIR/hpc.json")
-  PP_MEM=$(jq -r '.Preliminary.mem' "$RUN_DIR/hpc.json")
+  PP_MEM=$(jq -r '.Preliminary.mem_per_cpu' "$RUN_DIR/hpc.json")
   PP_MAIL=$(jq -r '.Preliminary.mail_type' "$RUN_DIR/hpc.json")
   # Get parameters for main analysis
   PM_NAME=$(jq -r '.Main.name' "$RUN_DIR/hpc.json")
   PM_TIME=$(jq -r '.Main.time' "$RUN_DIR/hpc.json")
   PM_NTASKS=$(jq -r '.Main.ntasks' "$RUN_DIR/hpc.json")
   PM_CPUS_TASK=$(jq -r '.Main.cpus_per_task' "$RUN_DIR/hpc.json")
-  PM_MEM=$(jq -r '.Main.mem' "$RUN_DIR/hpc.json")
+  PM_MEM=$(jq -r '.Main.mem_per_cpu' "$RUN_DIR/hpc.json")
   PM_MAIL=$(jq -r '.Main.mail_type' "$RUN_DIR/hpc.json")
 else
   NOHUP=$(is_boolean nohup)
@@ -278,7 +297,7 @@ else
     --time="$PP_TIME" \
     --ntasks="$PP_NTASKS" \
     --cpus-per-task="$PP_CPUS_TASK" \
-    --mem="$PP_MEM" \
+    --mem-per-cpu="$PP_MEM" \
     --mail-type="$PP_MAIL" \
     "$RUN_DIR/sh/regions.sh" "${PARAM[@]}"
   else
@@ -289,7 +308,7 @@ else
     --time="$PP_TIME" \
     --ntasks="$PP_NTASKS" \
     --cpus-per-task="$PP_CPUS_TASK" \
-    --mem="$PP_MEM" \
+    --mem-per-cpu="$PP_MEM" \
     --mail-type="$PP_MAIL" \
     "$RUN_DIR/sh/array.sh" "${PARAM[@]}"
   fi

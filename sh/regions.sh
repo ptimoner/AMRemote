@@ -68,6 +68,6 @@ sbatch \
   --time="$PP_TIME" \
   --ntasks="$PP_NTASKS" \
   --cpus-per-task="$PP_CPUS_TASK" \
-  --mem="$PP_MEM" \
+  --mem-per-cpu="$PP_MEM" \
   --mail-type="$PP_MAIL" \
   "$RUN_DIR/sh/array.sh" "${PARAM[@]}"

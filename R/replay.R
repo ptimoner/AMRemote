@@ -24,6 +24,8 @@ if (hpc) {
   pathOut <- "/batch/out"
 }
 
+# Only used in hpc (folders to be copied; see replay function in functions.R)
+pathDirOuts <- NULL
 
 # Get travel time now; if job array based on travel times it will be replaced
 maxTravelTime <- as.numeric(unlist(strsplit(commandArgs(trailingOnly = TRUE)[6], " ")))
@@ -144,8 +146,10 @@ if (zonalStat) {
 
 # End message
 if (hpc) {
-  # copySubfoldersContents("/tmp", "/batch/out")
-  system2("cp", c("-R", "-v", file.path("/tmp/*"), "/batch/out"))
+  for (outF in pathDirOuts) {
+    message(paste("Exporting", outF))
+    system2("cp", c("-r", outF, "/batch/out"))
+  }
 }
 
 amTimeStamp("Finished")

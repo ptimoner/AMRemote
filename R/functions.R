@@ -20,6 +20,7 @@ replay <- function (conf, tt, pathOut) {
   # Set output dir
   pathDirOut <- file.path(pathOut, paste0(tt, "-min"))
   mkdirs(pathDirOut)
+  pathDirOuts <<- c(pathDirOuts, pathDirOut)
   pathProjectOut <- file.path(pathDirOut, "project_out.am5p")
   
   # Launch replay

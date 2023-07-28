@@ -198,3 +198,12 @@ zonalAnalysis <- function(
   }
   return(res)
 }
+
+copySubfoldersContents <- function(sourceFolder, destinationFolder) {
+  files <- list.files(sourceFolder, recursive = TRUE, full.names = TRUE, include.dirs = TRUE)
+  for (file in files) {
+    if (!file.info(file)$isdir) {
+      file.copy(file, file.path(destinationFolder, sub(sourceFolder, "", file)))
+    }
+  }
+}

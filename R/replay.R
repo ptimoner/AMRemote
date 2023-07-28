@@ -143,4 +143,8 @@ if (zonalStat) {
 }
 
 # End message
+if (hpc) {
+  copySubfoldersContents("/tmp", "/batch/out")
+}
+
 amTimeStamp("Finished")

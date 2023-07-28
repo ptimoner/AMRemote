@@ -13,7 +13,7 @@ IMAGE=${PARAM[2]}
 
 # Not necessary anymore. It allows to write directly with --compat (?)
 # Make a tempdir for Accessmod DB
-# TEMP_DIR=$(mktemp -d)
+TEMP_DIR=$(mktemp -d)
 
 # Is this a regular job or a job array
 if [[ -n $SLURM_ARRAY_TASK_ID ]]
@@ -24,11 +24,11 @@ then
 fi
 
 # # Make temporary directory for GRASS database
-# mkdir -p "$TEMP_DIR/dbgrass"
-# mkdir -p "$TEMP_DIR/cache"
-# mkdir -p "$TEMP_DIR/logs"
-# # Directory to be binded
-# DATA_DIR="$TEMP_DIR"
+mkdir -p "$TEMP_DIR/dbgrass"
+mkdir -p "$TEMP_DIR/cache"
+mkdir -p "$TEMP_DIR/logs"
+# Directory to be binded
+DATA_DIR="$TEMP_DIR"
 
 # Other dir/files to be binded
 PROJECT_FILE="$INPUT_DIR/project.am5p"
@@ -53,9 +53,9 @@ then
     -B $REGION_JSON_FILE:/batch/regions.json \
     -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     -B $R_SCRIPT_FILE:/batch/replay.R \
+    -B $DATA_DIR:/data \
     --pwd /app \
-    $IMAGE \
-    bash -c "Rscript /batch/replay.R ${ARGUMENTS} && echo 'Exporting outputs...' && cp -R /tmp/* /batch/out"
+    $IMAGE \ Rscript /batch/replay.R "${PARAM[@]}"
 else
   echo "Start processing AccessMod Job"
   srun singularity run \
@@ -65,7 +65,7 @@ else
   -B $CONFIG_FILE:/batch/config.json \
   -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   -B $R_SCRIPT_FILE:/batch/replay.R \
+  -B $DATA_DIR:/data \
   --pwd /app \
-  $IMAGE \
-  bash -c "Rscript /batch/replay.R ${ARGUMENTS} && echo 'Exporting outputs...' && cp -R /tmp/* /batch/out"
+  $IMAGE \ Rscript /batch/replay.R "${PARAM[@]}"
 fi

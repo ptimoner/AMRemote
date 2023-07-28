@@ -55,7 +55,7 @@ then
     -B $R_SCRIPT_FILE:/batch/replay.R \
     -B $DATA_DIR:/data \
     --pwd /app \
-    $IMAGE \ Rscript /batch/replay.R "${PARAM[@]}"
+    $IMAGE Rscript /batch/replay.R "${PARAM[@]}"
 else
   echo "Start processing AccessMod Job"
   srun singularity run \
@@ -67,5 +67,5 @@ else
   -B $R_SCRIPT_FILE:/batch/replay.R \
   -B $DATA_DIR:/data \
   --pwd /app \
-  $IMAGE \ Rscript /batch/replay.R "${PARAM[@]}"
+  $IMAGE Rscript /batch/replay.R "${PARAM[@]}"
 fi

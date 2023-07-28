@@ -8,17 +8,22 @@ options(warn=-1)
 # Define paths and config
 pathConfig <- "/batch/config.json"
 pathProject <- "/batch/project.am5p"
-pathOut <- "/batch/out"
 pathRegions <- "/batch/regions.json"
 
 # Parse config.json
 conf <- amAnalysisReplayParseConf(pathConfig)
 
-# Get passed arguments
-args <- commandArgs(trailingOnly = TRUE)
+# # Get passed arguments
+# args <- commandArgs(trailingOnly = TRUE)
 
 # Cluster
-hpc <- as.logical(commandArgs(trailingOnly = TRUE)[1])
+hpc <- as.logical(commandArgs(trailingOnly=TRUE)[1])
+if (hpc) {
+  pathOut <- "/tmp"
+} else {
+  pathOut <- "/batch/out"
+}
+
 
 # Get travel time now; if job array based on travel times it will be replaced
 maxTravelTime <- as.numeric(unlist(strsplit(commandArgs(trailingOnly = TRUE)[6], " ")))

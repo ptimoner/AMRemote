@@ -43,6 +43,7 @@ if [[ $SPLIT == "true" ]]
 then
   REGION_JSON_FILE=${PARAM[28]}
   # Run image with binded inputs and launch R script
+  # Has been removed: # -B $DATA_DIR:/data \
   echo "Start processing AccessMod Job"
   srun singularity run \
     --compat \
@@ -52,7 +53,6 @@ then
     -B $REGION_JSON_FILE:/batch/regions.json \
     -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
     -B $R_SCRIPT_FILE:/batch/replay.R \
-    # -B $DATA_DIR:/data \
     --pwd /app \
     $IMAGE \
     bash -c "Rscript /batch/replay.R ${ARGUMENTS} && echo 'Exporting outputs...' && cp -R /tmp/* /batch/out"
@@ -65,7 +65,6 @@ else
   -B $CONFIG_FILE:/batch/config.json \
   -B $FUNCTIONS_SCRIPT_FILE:/batch/functions.R \
   -B $R_SCRIPT_FILE:/batch/replay.R \
-  # -B $DATA_DIR:/data \
   --pwd /app \
   $IMAGE \
   bash -c "Rscript /batch/replay.R ${ARGUMENTS} && echo 'Exporting outputs...' && cp -R /tmp/* /batch/out"

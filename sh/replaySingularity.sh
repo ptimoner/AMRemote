@@ -46,7 +46,6 @@ then
   # Has been removed: # -B $DATA_DIR:/data \
   echo "Start processing AccessMod Job"
   srun singularity run \
-    --compat \
     -B $OUTPUT_DIR:/batch/out \
     -B $PROJECT_FILE:/batch/project.am5p \
     -B $CONFIG_FILE:/batch/config.json \
@@ -59,7 +58,6 @@ then
 else
   echo "Start processing AccessMod Job"
   srun singularity run \
-  --compat \
   -B $OUTPUT_DIR:/batch/out \
   -B $PROJECT_FILE:/batch/project.am5p \
   -B $CONFIG_FILE:/batch/config.json \

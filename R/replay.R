@@ -144,7 +144,8 @@ if (zonalStat) {
 
 # End message
 if (hpc) {
-  copySubfoldersContents("/tmp", "/batch/out")
+  # copySubfoldersContents("/tmp", "/batch/out")
+  system2("cp", c("-R", "-v", file.path("tmp/*"), "/batch/out"))
 }
 
 amTimeStamp("Finished")

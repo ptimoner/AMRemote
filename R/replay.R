@@ -19,7 +19,9 @@ conf <- amAnalysisReplayParseConf(pathConfig)
 # Cluster
 hpc <- as.logical(commandArgs(trailingOnly=TRUE)[1])
 if (hpc) {
-  pathOut <- "/tmp"
+  # Was necessary when we had the issue related to the writing file with gdal in a binded folder
+  # pathOut <- "/tmp"
+  pathOut <- "/batch/out"
 } else {
   pathOut <- "/batch/out"
 }
@@ -144,12 +146,13 @@ if (zonalStat) {
   write.csv(res, file.path(zonalStatDir, "zonalStat.csv"), row.names = FALSE)
 }
 
-# End message
-if (hpc) {
-  for (outF in pathDirOuts) {
-    message(paste("Exporting", outF))
-    system2("cp", c("-r", outF, "/batch/out"))
-  }
-}
+# # Was necessary when we had the issue related to the writing file with gdal in a binded folder
+# if (hpc) {
+#   for (outF in pathDirOuts) {
+#     message(paste("Exporting", outF))
+#     system2("cp", c("-r", outF, "/batch/out"))
+#   }
+# }
 
+# End message
 amTimeStamp("Finished")

@@ -33,6 +33,11 @@ amGrassNS(
     vect <- readVECT(conf$args$inputHf)
     df <- vect@data
     hfCat <- df[, "cat"]
+    if (!colName %in% colnames(df)) {
+      message("Invalid splitRegionAdminColName in inputs.json")
+      message("Column names in the health facility shapefile are the following:")
+      print(colnames(df))
+    }
     hfRegion <- df[, colName]
     hfIndex <- as.numeric(as.factor(hfRegion))
     hfDf <- data.frame(cat = hfCat, region = hfRegion, index = hfIndex)

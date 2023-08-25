@@ -1,9 +1,9 @@
 {
-    "inputFolder": "demo/accessibility",
+    "inputFolder": "demo/coverage",
     "AccessModImage": "~/accessmod.sif",
     "maxTravelTime": [60],
     "splitRegion": false,
-    "splitRegionAdminColName": "",
+    "splitRegionAdminColName": "admin_name",
     "zonalStat": false,
     "zonalStatPop": "",
     "zonalStatZones": "",

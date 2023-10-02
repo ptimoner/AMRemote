@@ -44,7 +44,7 @@ $ git clone https://github.com/ptimoner/AMRemote/
 ```
 
 ```txt 
-$ git pull AMRemote
+$ git pull
 ```
 
 ## Procedure

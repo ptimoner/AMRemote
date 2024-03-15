@@ -25,8 +25,9 @@ On the cluster (cluster uses Singularity instead of Docker):
 ```txt 
 $ singularity pull ~/image/accessmod.sif docker://fredmoser/accessmod:5.8.0
 ```
-where the image (fredmoser/accessmod:5.8.0) can be adapted, and the path (~/image/accessmod.sif) is chosen by the user. 
+where the image (fredmoser/accessmod:5.8.0) can be adapted, and the path (~/image/accessmod.sif) is chosen by the user. It is important that both the AccessMod version used to generate config.json file and the image version used for the replay match.
 More details here: https://docs.sylabs.io/guides/3.2/user-guide/cli/singularity_pull.html
+
 
 On a regular server or on your local machine:
 

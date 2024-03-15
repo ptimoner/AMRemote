@@ -1,6 +1,6 @@
 # Import project
 importProject <- function (pathProject, conf) {
-  amAnalisisReplayImportProject(
+  amAnalysisReplayImportProject(
   archive = pathProject,
   name = conf$location,
   overwrite = TRUE

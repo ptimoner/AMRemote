@@ -1,5 +1,5 @@
-# AMRemote
-This enhanced version of the standard tool for running AccessMod analyses introduces a special functionality within the replay function. It uniquely allows for looping through multiple merged landcovers, a convenient feature for analyses with multiple changing barriers (e.g., floods). To utilize this functionality, users must specify all merged landcover labels in the `replay.r` function. If needed, zonal statistics can be calculated as usual. Note: All merged landcover layers must be included in the exported project from AccessMod.
+# AMRemote - Looped Merged Landcover Version
+This adapted version of the standard tool for running AccessMod analyses introduces a special functionality within the replay function. It uniquely allows for looping through multiple merged landcovers, a convenient feature for analyses with multiple changing barriers (e.g., floods). To utilize this functionality, users must specify all merged landcover labels in the `replay.r` function. If needed, zonal statistics can be calculated as usual. Note: All merged landcover layers must be included in the exported project from AccessMod.
 
 It can be run on a your local machine, a regular server or a cluster. A Unix-like OS on your machine is required, either to run the replay or to interact with a server/cluster. Docker (server, local machine) or Singularity (cluster) is also required.
 

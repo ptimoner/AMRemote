@@ -82,11 +82,49 @@ if (zonalStat) {
 print("Importing the project...")
 importProject(pathProject, conf)
 
+mergedLCLabels <- c() # Provide the list of merged land cover labels to be used in the loop
+
 # We can keep the loop; when HPC and array based on travel times,
 # maxTravelTime (timeThr) length is 1
 for (tt in timeThr) {
   if (! split) {
-    replay(conf, tt, pathOut)
+    for (i in 1:length(mergedLCLabels)) {
+      confi <- conf
+      confi$args$inputMerged <- paste0("rLandCoverMerged__", mergedLCLabels[i])
+      pathOuti <- paste0(pathOut, "/", mergedLCLabels[i])
+      replay(confi, tt, pathOuti)
+
+            # If Zonal Stat (no split possible, neither job array)
+      if (zonalStat) {
+        message("Zonal statistics...")
+        inputTravelTime <- confi$args$outputTravelTime
+        popLabel <- commandArgs(trailingOnly = TRUE)[10]
+        zoneLabel <- commandArgs(trailingOnly = TRUE)[11]
+        inputPop <- paste0("rPopulation__", popLabel)
+        inputZone <- paste0("vZone__", zoneLabel)
+        timeCumCosts <- maxTravelTime
+        zoneIdField <- commandArgs(trailingOnly = TRUE)[12]
+        zoneLabelField <- commandArgs(trailingOnly = TRUE)[13]
+        amGrassNS(
+          location = conf$location,
+          mapset = conf$mapset,
+          {
+            res <- zonalAnalysis(
+              inputTravelTime,
+              inputPop,
+              inputZone,
+              timeCumCosts,
+              zoneIdField,
+              zoneLabelField
+            )
+          }
+        )
+        zonalStatDir <- file.path(pathOuti, "zonalStat")
+        mkdirs(zonalStatDir) 
+        write.csv(res, file.path(zonalStatDir, paste0("zonalStat__", mergedLCLabels[i], ".csv")), row.names = FALSE)
+}
+
+    }
   } else {
     if (hpc) {
       # Parse regions.json
@@ -116,35 +154,6 @@ for (tt in timeThr) {
   }
 }
 
-# If Zonal Stat (no split possible, neither job array)
-if (zonalStat) {
-  message("Zonal statistics...")
-  inputTravelTime <- conf$args$outputTravelTime
-  popLabel <- commandArgs(trailingOnly = TRUE)[10]
-  zoneLabel <- commandArgs(trailingOnly = TRUE)[11]
-  inputPop <- paste0("rPopulation__", popLabel)
-  inputZone <- paste0("vZone__", zoneLabel)
-  timeCumCosts <- maxTravelTime
-  zoneIdField <- commandArgs(trailingOnly = TRUE)[12]
-  zoneLabelField <- commandArgs(trailingOnly = TRUE)[13]
-  amGrassNS(
-    location = conf$location,
-    mapset = conf$mapset,
-    {
-      res <- zonalAnalysis(
-        inputTravelTime,
-        inputPop,
-        inputZone,
-        timeCumCosts,
-        zoneIdField,
-        zoneLabelField
-      )
-    }
-  )
-  zonalStatDir <- file.path(pathOut, "zonalStat")
-  mkdirs(zonalStatDir) 
-  write.csv(res, file.path(zonalStatDir, "zonalStat.csv"), row.names = FALSE)
-}
 
 # # Was necessary when we had the issue related to the writing file with gdal in a binded folder
 # if (hpc) {
